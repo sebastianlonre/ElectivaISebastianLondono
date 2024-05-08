@@ -2,30 +2,15 @@ import React, { useContext, useState } from 'react';
 import { Outlet, Link } from 'react-router-dom';
 import { Login, Register } from '../modals';
 import { AuthContext } from '../context/auth/AuthContext';
+import { useModal } from '../modals/hooks/useModal';
 
 
 export const NavBar = () => {
 
     const { user, logout } = useContext(AuthContext);
 
-    const [showLoginForm, setShowLoginForm] = useState(false);
-    const [showRegisterForm, setShowRegisterForm] = useState(false);
-
-    const openLoginForm = () => {
-        setShowLoginForm(true);
-    };
-
-    const closeLoginForm = () => {
-        setShowLoginForm(false);
-    };
-
-    const openRegisterForm = () => {
-        setShowRegisterForm(true);
-    };
-
-    const closeRegisterForm = () => {
-        setShowRegisterForm(false);
-    };
+    const loginModal = useModal();
+    const registerModal = useModal();
 
   return (
     <>
@@ -65,10 +50,10 @@ export const NavBar = () => {
                         {!user && (
                             <>
                                 <li className={`nav-item`}>
-                                    <Link className="nav-link" onClick={openLoginForm}>Login</Link>
+                                    <Link className="nav-link" onClick={loginModal.openModal}>Login</Link>
                                 </li>
                                 <li className={`nav-item`}>
-                                    <Link className="nav-link" onClick={openRegisterForm}>Register</Link>
+                                    <Link className="nav-link" onClick={registerModal.openModal}>Register</Link>
                                 </li>
                             </>
                         )}
@@ -89,8 +74,8 @@ export const NavBar = () => {
                         <button className="btn btn-outline-dark text-dark" type="submit">Buscar</button>
                     </form>
                 </div>
-                <Login isOpen={showLoginForm} onClose={closeLoginForm} openRegisterForm={openRegisterForm}/>
-                <Register isOpen={showRegisterForm} onClose={closeRegisterForm} openLoginForm={openLoginForm}/>
+                <Login isOpen={loginModal.isOpen} onClose={loginModal.closeModal} openRegisterForm={registerModal.openModal}/>
+                <Register isOpen={registerModal.isOpen} onClose={registerModal.closeModal} openLoginForm={loginModal.openModal}/>
             </div>
         </nav>
         <Outlet/>
