@@ -2,20 +2,12 @@ import { Link } from 'react-router-dom';
 import { Reviews } from '../components/products/Reviews';
 import { ReviewFormModal } from '../components/products/ReviewFormModal';
 import { useState } from 'react';
+import { useModal } from '../modals/hooks/useModal';
 
 export const ViewProduct = () => {
 
-  const [showReviewForm, setShowReviewForm] = useState(false);
+  const reviewModal = useModal();
 
-  const openReviewForm = (event) => {
-    event.preventDefault();
-    setShowReviewForm(true);
-  };
-  
-
-  const closeReviewForm = () => {
-    setShowReviewForm(false);
-  };
   return (
     <div className="container mt-5">
       <div className="justify-content-center align-items-center">
@@ -38,21 +30,21 @@ export const ViewProduct = () => {
                 </div>
 
                 <p className="mt-3">etiquetas: tecnologia, camaras,</p>
-                <div className='d-flex flex-row'> 
+                <div className='d-flex flex-row'>
                   <button className="btn btn-outline-dark text-dark mt-3 mr-2">
                     <Link className="nav-link" to="/">comprar</Link>
                   </button>
-                  <button className="btn btn-outline-dark text-dark mt-3" onClick={openReviewForm}>
+                  <button type='button' className="btn btn-outline-dark text-dark mt-3" onClick={reviewModal.openModal}>
                   Subir reseña
                   </button>
-                </div>  
-                
+                </div>
+
               </div>
             </div>
 
             <br />
             <div>
-              
+
             </div>
           </form>
         </div>
@@ -60,7 +52,7 @@ export const ViewProduct = () => {
       <div className="mt-5">
         <Reviews/>
       </div>
-      <ReviewFormModal isOpen={showReviewForm} onClose={closeReviewForm} />
+      <ReviewFormModal isOpen={reviewModal.isOpen} onClose={reviewModal.closeModal} />
     </div>
   )
 }
