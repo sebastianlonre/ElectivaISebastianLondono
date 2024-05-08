@@ -1,8 +1,7 @@
 import { Link } from 'react-router-dom';
-import { Reviews } from '../components/products/Reviews';
-import { ReviewFormModal } from '../components/products/ReviewFormModal';
-import { useState } from 'react';
-import { useModal } from '../modals/hooks/useModal';
+import { Reviews } from '../../components/products/Reviews';
+import { ReviewFormModal } from '../../modals';
+import { useModal } from '../../modals/hooks/useModal';
 
 export const ViewProduct = () => {
 

@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom"
-import { AuthContext } from '../context/auth/AuthContext';
+import { AuthContext } from '../../context/auth/AuthContext';
 import { useContext, useState, useEffect } from "react";
 
 export const Profile = () => {
@@ -41,12 +41,12 @@ export const Profile = () => {
             <p className="ms-auto me-5">creado el: {user?.createdAt}</p>
             <br></br>
             <div className="input-group mb-3">
-              <input 
-                type="text" 
+              <input
+                type="text"
                 required
-                className="form-control" 
-                aria-label="Sizing example input" 
-                aria-describedby="inputGroup-sizing-default" 
+                className="form-control"
+                aria-label="Sizing example input"
+                aria-describedby="inputGroup-sizing-default"
                 placeholder={user?.username}
                 value={formState.username}
                 onChange={handleChange}
@@ -55,12 +55,12 @@ export const Profile = () => {
             </div>
 
             <div className="input-group mb-3">
-              <input 
-                type="email" 
+              <input
+                type="email"
                 required
-                className="form-control" 
-                aria-label="Sizing example input" 
-                aria-describedby="inputGroup-sizing-default" 
+                className="form-control"
+                aria-label="Sizing example input"
+                aria-describedby="inputGroup-sizing-default"
                 placeholder={formState.email}
                 value={formState.email}
                 onChange={handleChange}
@@ -69,12 +69,12 @@ export const Profile = () => {
             </div>
 
             <div className="input-group mb-3">
-              <input 
+              <input
                 type="password"
                 required
-                className="form-control" 
-                aria-label="Sizing example input" 
-                aria-describedby="inputGroup-sizing-default" 
+                className="form-control"
+                aria-label="Sizing example input"
+                aria-describedby="inputGroup-sizing-default"
                 placeholder={formState.password}
                 value={formState.password}
                 onChange={handleChange}
@@ -83,10 +83,10 @@ export const Profile = () => {
             </div>
 
             <div className="input-group mb-3">
-              <textarea 
-                class="form-control" 
-                id="exampleFormControlTextarea1" 
-                rows="3" 
+              <textarea
+                class="form-control"
+                id="exampleFormControlTextarea1"
+                rows="3"
                 placeholder={formState.description}
                 value={formState.description}
                 onChange={handleChange}
@@ -106,4 +106,3 @@ export const Profile = () => {
     </div>
   )
 }
-
