@@ -1,6 +1,8 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect} from 'react';
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../context/auth/AuthContext';
+import { FirebaseAuth } from '../firebase/connectionFireBase'; 
+import { signInWithEmailAndPassword } from 'firebase/auth'; 
 
 export const Login = ({ isOpen, onClose, openRegisterForm }) => {
   const { login } = useContext(AuthContext);
@@ -8,22 +10,30 @@ export const Login = ({ isOpen, onClose, openRegisterForm }) => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
-  const handleLogin = (e) => {
-
+  useEffect(() => {
+    if (!isOpen) {
+      setUsername('');
+      setPassword('');
+      setError('');
+    }
+  }, [isOpen]); 
+  const handleLogin = async (e) => {
     e.preventDefault();
 
-    const users = JSON.parse(localStorage.getItem('users')) || [];
-
-    const foundUser = users.find(user => user.username === username && user.password === password);
-
-    if (foundUser) {
-      login(foundUser);
-      onClose();
-    } else {
-      setError('Usuario o contraseña incorrectos');
+    try {
+      const userCredential = await signInWithEmailAndPassword(FirebaseAuth, username, password);
+      const user = userCredential.user;
+      if (user) {
+        login(user); 
+        onClose();
+      } else {
+        setError('Usuario o contraseña incorrectos');
+      }
+    } catch (error) {
+      setError('Error al iniciar sesión. Verifica tus credenciales.');
+      console.error('Error al iniciar sesión:', error);
     }
   };
-
 
   return (
     <>
@@ -75,3 +85,5 @@ export const Login = ({ isOpen, onClose, openRegisterForm }) => {
     </>
   );
 };
+
+
