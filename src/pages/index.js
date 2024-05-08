@@ -1,6 +1,0 @@
-export * from './HomePage'
-export * from './Login'
-export * from './Register'
-export * from './Profile'
-export * from './PushProuduct'
-export * from './ViewProduct'
