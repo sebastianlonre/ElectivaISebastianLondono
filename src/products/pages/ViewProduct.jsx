@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Reviews } from '../../components/products/Reviews';
+import { Reviews } from '../components';
 import { ReviewFormModal } from '../../modals';
 import { useModal } from '../../modals/hooks/useModal';
 

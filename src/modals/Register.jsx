@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { handleSubmit, handleChange } from '../components/register/formFunctions';
+import { handleSubmit, handleChange } from './components/register/formFunctions';
 
 export const Register = ({ isOpen, onClose, openLoginForm }) => {
-  
+
   const [formData, setFormData] = useState({
     username: '',
     email: '',
