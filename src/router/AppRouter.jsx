@@ -1,6 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 import { NavBar } from "../UI/NavBar";
-import { HomePage, Login, Register, Profile, PushProuduct, ViewProduct } from "../pages";
+import { HomePage, Profile, PushProuduct, ViewProduct } from "../pages";
 
 export const AppRouter = () => {
   return (

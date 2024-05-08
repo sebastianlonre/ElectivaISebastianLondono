@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { Outlet, Link } from 'react-router-dom';
-import { Login, Register } from '../pages';
+import { Login, Register } from '../modals';
 import { AuthContext } from '../context/auth/AuthContext';
 
 
@@ -14,7 +14,7 @@ export const NavBar = () => {
     const openLoginForm = () => {
         setShowLoginForm(true);
     };
-      
+
     const closeLoginForm = () => {
         setShowLoginForm(false);
     };
@@ -22,7 +22,7 @@ export const NavBar = () => {
     const openRegisterForm = () => {
         setShowRegisterForm(true);
     };
-      
+
     const closeRegisterForm = () => {
         setShowRegisterForm(false);
     };
@@ -49,7 +49,7 @@ export const NavBar = () => {
                                     perfil
                                 </Link>
                                 <ul className="dropdown-menu dropdown-menu-light">
-                                    
+
                                     <li>
                                         <Link className="dropdown-item" to="/Profile">Mi perfil</Link>
                                     </li>
@@ -61,7 +61,7 @@ export const NavBar = () => {
                             </ul>
                         </div>
                         )}
-                        
+
                         {!user && (
                             <>
                                 <li className={`nav-item`}>
@@ -82,7 +82,7 @@ export const NavBar = () => {
                                 </li>
                             </>
                         )}
-                        
+
                     </ul>
                     <form className="d-flex" role="search">
                         <input className="form-control me-2" type="search" placeholder=". . ." aria-label="Search"/>
@@ -97,4 +97,3 @@ export const NavBar = () => {
     </>
   )
 }
-
