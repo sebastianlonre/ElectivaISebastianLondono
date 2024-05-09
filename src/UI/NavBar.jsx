@@ -41,6 +41,9 @@ export const NavBar = () => {
                                     <li>
                                         <Link className="dropdown-item" to="/Profile/pushProduct">subir producto</Link>
                                     </li>
+                                    <li>
+                                        <Link className="dropdown-item" to="/Profile/MyProducts">Mis Productos</Link>
+                                    </li>
                                 </ul>
                                 </li>
                             </ul>

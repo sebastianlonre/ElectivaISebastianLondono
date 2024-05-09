@@ -1,6 +1,6 @@
 import { Routes, Route } from "react-router-dom"
 import { PushProuduct } from "../../products/pages"
-import { Profile } from "../pages"
+import { MyProducts, Profile } from "../pages"
 
 export const ProfileRouter = () => {
   return (
@@ -8,6 +8,7 @@ export const ProfileRouter = () => {
       <Routes>
         <Route path="/*" element={<Profile/>}/>
         <Route path="/PushProduct" element={<PushProuduct/>}/>
+        <Route path="/MyProducts" element={<MyProducts/>}/>
       </Routes>
     </>
   )
