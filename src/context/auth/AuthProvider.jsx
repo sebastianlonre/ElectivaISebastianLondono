@@ -1,56 +1,60 @@
-import { useReducer } from "react";
+import React, { useEffect, useReducer } from 'react';
+import { AuthContext } from './AuthContext';
+import { authReducer } from '../reducers/AuthReducer';
+import { types } from '../types';
+import { FirebaseAuth } from '../../firebase/connectionFireBase';
 
-import { AuthContext } from "./AuthContext";
-import { authReducer } from "../reducers/AuthReducer";
-import { types } from "../types";
 
-const initialState = { logged: false };
+const initialState = { logged: false, user: null };
 
 const init = () => {
-  const user = JSON.parse(localStorage.getItem('user'))
+  const user = JSON.parse(localStorage.getItem('user'));
   return {
     logged: !!user,
-    user
-  }
-}
+    user: user
+  };
+};
 
 export const AuthProvider = ({ children }) => {
-  
-  const [authState, dispatch ] = useReducer(authReducer, initialState, init);
+  const [authState, dispatch] = useReducer(authReducer, initialState, init);
 
-  const login = (userData) => {
-    const action = { type: types.login, payload: userData }
+  useEffect(() => {
+    const unsubscribe = FirebaseAuth.onAuthStateChanged((user) => {
+      if (user) {
+        localStorage.setItem('user', JSON.stringify(user));
+        dispatch({ type: types.login, payload: user });
+      } else {
+        localStorage.removeItem('user');
+        dispatch({ type: types.logout });
+      }
+    });
 
-    localStorage.setItem('user', JSON.stringify(userData))
+    return () => unsubscribe();
+  }, []);
 
-    dispatch(action);
-  }
+  const login = async (userData) => {
+    const { email, password } = userData;
+    await FirebaseAuth.signInWithEmailAndPassword(email, password);
+  };
 
-  const logout = () => {
-    localStorage.removeItem('user')
-    const action = { type: types.logout }
-    dispatch(action)
-  }
+  const logout = async () => {
+    await FirebaseAuth.signOut();
+  };
 
   const updateUser = (updatedUserData) => {
-    const action = { type: types.update, payload: updatedUserData }
-
-    localStorage.setItem('user', JSON.stringify(updatedUserData))
-
-    dispatch(action);
-  }
+    dispatch({ type: types.update, payload: updatedUserData });
+  };
 
   return (
-    <AuthContext.Provider value={
-      {
+    <AuthContext.Provider
+      value={{
         ...authState,
-        login: login,
-        logout: logout,
-        updateUser: updateUser
-      }
-    }
+        login,
+        logout,
+        updateUser
+      }}
     >
-      { children }
+      {children}
     </AuthContext.Provider>
-  )
-}
+  );
+};
