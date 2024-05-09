@@ -1,10 +1,9 @@
-import React, { useState, useContext, useEffect} from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../context/auth/AuthContext';
 
-
 export const Login = ({ isOpen, onClose, openRegisterForm }) => {
-  const { login, errorMessage } = useContext(AuthContext);
+  const { login, loginGoogle, errorMessage } = useContext(AuthContext);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -21,9 +20,24 @@ export const Login = ({ isOpen, onClose, openRegisterForm }) => {
 
     if (isValidLogin) {
       onClose();
-      errorMessage=false;
+      
     }
+  };
 
+  const onGoogleLogin = async (event) => {
+    event.preventDefault();
+
+    try {
+      const isValidLogin = await loginGoogle();
+  
+      if (isValidLogin) {
+        onClose();
+      } else {
+        console.log('Error al iniciar sesión con Google');
+      }
+    } catch (error) {
+      console.error('Error inesperado al iniciar sesión con Google:', error);
+    }
   };
 
   return (
@@ -33,18 +47,16 @@ export const Login = ({ isOpen, onClose, openRegisterForm }) => {
           <div className="card p-4">
             <form onSubmit={handleLogin}>
               <button type="button" className="btn btn-close float-end" aria-label="Close" onClick={onClose}></button>
-              <h2>Iniciar sesión</h2>
-              <br />
+              <h2 className="mb-4">Iniciar sesión</h2>
+
               <div className="input-group mb-3">
                 <input
-                  type="Email"
+                  type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
                   className="form-control"
-                  aria-label="Sizing example input"
-                  aria-describedby="inputGroup-sizing-default"
-                  placeholder='Correo'
+                  placeholder="Correo"
                 />
               </div>
 
@@ -55,27 +67,28 @@ export const Login = ({ isOpen, onClose, openRegisterForm }) => {
                   onChange={(e) => setPassword(e.target.value)}
                   required
                   className="form-control"
-                  aria-label="Sizing example input"
-                  aria-describedby="inputGroup-sizing-default"
-                  placeholder='Contraseña'
+                  placeholder="Contraseña"
                 />
               </div>
 
-              { !errorMessage ? null :
-                    <div
-                      className="alert alert-danger"
-                      role="alert"
-                    >
-                      Usuario o contraseña invalido
-                    </div>
-                  }
+              {!errorMessage ? null : (
+                <div className="alert alert-danger" role="alert">
+                  Usuario o contraseña inválidos
+                </div>
+              )}
 
-              <Link className="nav-link" onClick={() => { onClose(); openRegisterForm(); }}>¿No tienes una cuenta? Regístrate</Link>
-              <br />
+              <Link className="nav-link" onClick={() => { onClose(); openRegisterForm(); }}>
+                ¿No tienes una cuenta? Regístrate
+              </Link>
 
-              <div>
-                <button className="btn btn-outline-dark text-dark" type="submit">Iniciar sesión</button>
-              </div>
+              <button className="btn btn-outline-dark text-dark mt-3" type="submit">
+                Iniciar sesión
+              </button>
+
+              {}
+              <button className="btn btn-outline-primary mt-3" onClick={onGoogleLogin}>
+                Iniciar sesión con Google
+              </button>
 
             </form>
           </div>

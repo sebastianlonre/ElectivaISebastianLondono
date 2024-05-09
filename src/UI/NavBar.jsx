@@ -37,6 +37,8 @@ export const NavBar = () => {
 
                                     <li>
                                         <Link className="dropdown-item" to="/Profile">{user?.email}</Link>
+                                        <Link className="dropdown-item" to="/Profile">{user?.googleEmail}</Link>
+
                                     </li>
                                     <li>
                                         <Link className="dropdown-item" to="/Profile/pushProduct">subir producto</Link>
