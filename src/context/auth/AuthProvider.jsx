@@ -2,7 +2,7 @@ import React, { useEffect, useReducer } from 'react';
 import { AuthContext } from './AuthContext';
 import { authReducer } from '../reducers/AuthReducer';
 import { types } from '../types';
-import { signInUser, logoutUser } from '../../firebase/firebaseProvider';
+import { signInUser, logoutUser, signInwithGoogle } from '../../firebase/firebaseProvider';
 
 
 const initialState = { logged: false, user: null };
@@ -38,6 +38,27 @@ export const AuthProvider = ({ children }) => {
     return true;
   };
 
+  const loginGoogle = async () => {
+
+    const { ok, uid, photoURL, displayName, email: googleEmail , errorMessage } = await signInwithGoogle();
+
+    if (!ok) {
+      dispatch({ type: types.error, payload: { errorMessage }})
+      return false;
+    }
+
+    const payload = {uid, googleEmail, photoURL, displayName}
+
+    const action = { type: types.login, payload }
+
+    localStorage.setItem('user', JSON.stringify(payload))
+
+    dispatch(action);
+
+    return true;
+
+
+  }
 
   const logout = async () => {
     localStorage.removeItem('user');
@@ -56,6 +77,7 @@ export const AuthProvider = ({ children }) => {
         ...authState,
         login,
         logout,
+        loginGoogle,
         updateUser
       }}
     >
