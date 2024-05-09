@@ -16,6 +16,7 @@ export const signInUser = async (email, password) => {
     }
 
   } catch (error) {
+    console.error("Error al iniciar sesión:", error);
     return {
       ok: false,
       errorMessage: error.message

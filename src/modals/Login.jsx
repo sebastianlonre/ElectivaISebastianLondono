@@ -2,24 +2,27 @@ import React, { useState, useContext, useEffect} from 'react';
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../context/auth/AuthContext';
 
+
 export const Login = ({ isOpen, onClose, openRegisterForm }) => {
   const { login, errorMessage } = useContext(AuthContext);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
 
   useEffect(() => {
     if (!isOpen) {
       setEmail('');
       setPassword('');
-      setError('');
     }
   }, [isOpen]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    await login(email, password);
-    onClose();
+    const isValidLogin = await login(email, password);
+
+    if (isValidLogin) {
+      onClose();
+    }
+
   };
 
   return (
@@ -57,7 +60,14 @@ export const Login = ({ isOpen, onClose, openRegisterForm }) => {
                 />
               </div>
 
-              {error && <p className="text-danger">{error}</p>}
+              { !errorMessage ? null :
+                    <div
+                      className="alert alert-danger"
+                      role="alert"
+                    >
+                      Usuario o contraseña invalido
+                    </div>
+                  }
 
               <Link className="nav-link" onClick={() => { onClose(); openRegisterForm(); }}>¿No tienes una cuenta? Regístrate</Link>
               <br />
@@ -65,14 +75,7 @@ export const Login = ({ isOpen, onClose, openRegisterForm }) => {
               <div>
                 <button className="btn btn-outline-dark text-dark" type="submit">Iniciar sesión</button>
               </div>
-              { !errorMessage ? null :
-                    <div
-                      className="alert alert-danger"
-                      role="alert"
-                    >
-                      { errorMessage }
-                    </div>
-                  }
+
             </form>
           </div>
         </div>

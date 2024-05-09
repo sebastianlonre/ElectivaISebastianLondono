@@ -23,7 +23,8 @@ export const AuthProvider = ({ children }) => {
     const { ok, uid, photoURL, displayName, errorMessage } = await signInUser(email, password);
 
     if (!ok) {
-      dispatch({ type: types.login, payload: { errorMessage }})
+      dispatch({ type: types.error, payload: { errorMessage }})
+      return false;
     }
 
     const payload = {uid, email, photoURL, displayName, email}
@@ -36,6 +37,7 @@ export const AuthProvider = ({ children }) => {
 
     return true;
   };
+
 
   const logout = async () => {
     localStorage.removeItem('user');
