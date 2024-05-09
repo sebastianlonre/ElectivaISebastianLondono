@@ -2,7 +2,7 @@ import React, { useEffect, useReducer } from 'react';
 import { AuthContext } from './AuthContext';
 import { authReducer } from '../reducers/AuthReducer';
 import { types } from '../types';
-import { FirebaseAuth } from '../../firebase/connectionFireBase';
+import { signInUser, logoutUser } from '../../firebase/firebaseProvider';
 
 
 const initialState = { logged: false, user: null };
@@ -16,31 +16,33 @@ const init = () => {
 };
 
 export const AuthProvider = ({ children }) => {
+
   const [authState, dispatch] = useReducer(authReducer, initialState, init);
 
-  useEffect(() => {
-    const unsubscribe = FirebaseAuth.onAuthStateChanged((user) => {
-      if (user) {
-        localStorage.setItem('user', JSON.stringify(user));
-        dispatch({ type: types.login, payload: user });
-      } else {
-        localStorage.removeItem('user');
-        dispatch({ type: types.logout });
-      }
-    });
+  const login = async (email='', password='') => {
+    const { ok, uid, photoURL, displayName, errorMessage } = await signInUser(email, password);
 
-    return () => unsubscribe();
-  }, []);
+    if (!ok) {
+      dispatch({ type: types.error, payload: { errorMessage }})
+      return false;
+    }
 
-  const login = async (userData) => {
-    const { email, password } = userData;
-    await FirebaseAuth.signInWithEmailAndPassword(email, password);
+    const payload = {uid, email, photoURL, displayName, email}
+
+    const action = { type: types.login, payload }
+
+    localStorage.setItem('user', JSON.stringify(payload))
+
+    dispatch(action);
+
+    return true;
   };
+
 
   const logout = async () => {
     localStorage.removeItem('user');
     const action ={type: types.logout}
-    await FirebaseAuth.signOut();
+    logoutUser();
     dispatch(action)
   };
 
