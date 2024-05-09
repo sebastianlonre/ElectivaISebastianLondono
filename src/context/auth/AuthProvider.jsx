@@ -38,7 +38,10 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = async () => {
+    localStorage.removeItem('user');
+    const action ={type: types.logout}
     await FirebaseAuth.signOut();
+    dispatch(action)
   };
 
   const updateUser = (updatedUserData) => {
