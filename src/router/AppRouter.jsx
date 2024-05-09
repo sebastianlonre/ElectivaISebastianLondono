@@ -1,9 +1,9 @@
 import { Routes, Route } from "react-router-dom";
 import { NavBar } from "../UI/NavBar";
-import {PushProuduct, ViewProduct } from "../products/pages";
+import { ViewProduct } from "../products/pages";
 import { HomePage } from "../homePage/pages";
-import { Profile } from "../Profile/pages"
 import { PrivateRoute } from "./PrivateRoute";
+import { ProfileRouter } from "../Profile/routes/ProfileRouter";
 
 export const AppRouter = () => {
   return (
@@ -12,18 +12,10 @@ export const AppRouter = () => {
             <Route path="/" element={<NavBar/>}>
                 <Route index element={<HomePage/>}/>
 
-                <Route path="/Profile"
+                <Route path="/Profile/*"
                 element={
                   <PrivateRoute>
-                    <Profile/>
-                  </PrivateRoute>
-
-                }/>
-
-                <Route path="/PushProuduct"
-                element={
-                  <PrivateRoute>
-                    <PushProuduct/>
+                    <ProfileRouter/>
                   </PrivateRoute>
                 }/>
 

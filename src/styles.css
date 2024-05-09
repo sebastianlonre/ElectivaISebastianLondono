@@ -9,9 +9,13 @@
   }
 
   .bg-gray {
-    background-color: rgb(194, 194, 194); /* Cambia #ff0000 por el color que desees */
+    background-color: rgb(194, 194, 194);
   }
 
   .bg-purple {
     background-image: linear-gradient(to bottom, rgb(122, 122, 122), rgb(226, 226, 226));
+  }
+
+  .button-margin{
+    margin-right: 4px;
   }
