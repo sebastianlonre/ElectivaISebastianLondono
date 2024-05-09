@@ -1,38 +1,29 @@
 import React, { useState, useContext, useEffect} from 'react';
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../context/auth/AuthContext';
-import { FirebaseAuth } from '../firebase/connectionFireBase'; 
-import { signInWithEmailAndPassword } from 'firebase/auth'; 
+
 
 export const Login = ({ isOpen, onClose, openRegisterForm }) => {
-  const { login } = useContext(AuthContext);
-  const [username, setUsername] = useState('');
+  const { login, errorMessage } = useContext(AuthContext);
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
 
   useEffect(() => {
     if (!isOpen) {
-      setUsername('');
+      setEmail('');
       setPassword('');
-      setError('');
     }
-  }, [isOpen]); 
+  }, [isOpen]);
+
   const handleLogin = async (e) => {
     e.preventDefault();
+    const isValidLogin = await login(email, password);
 
-    try {
-      const userCredential = await signInWithEmailAndPassword(FirebaseAuth, username, password);
-      const user = userCredential.user;
-      if (user) {
-        login(user); 
-        onClose();
-      } else {
-        setError('Usuario o contraseña incorrectos');
-      }
-    } catch (error) {
-      setError('Error al iniciar sesión. Verifica tus credenciales.');
-      console.error('Error al iniciar sesión:', error);
+    if (isValidLogin) {
+      onClose();
+      errorMessage=false;
     }
+
   };
 
   return (
@@ -46,14 +37,14 @@ export const Login = ({ isOpen, onClose, openRegisterForm }) => {
               <br />
               <div className="input-group mb-3">
                 <input
-                  type="text"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
+                  type="Email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   required
                   className="form-control"
                   aria-label="Sizing example input"
                   aria-describedby="inputGroup-sizing-default"
-                  placeholder='Usuario'
+                  placeholder='Correo'
                 />
               </div>
 
@@ -70,14 +61,22 @@ export const Login = ({ isOpen, onClose, openRegisterForm }) => {
                 />
               </div>
 
-              {error && <p className="text-danger">{error}</p>}
-              
+              { !errorMessage ? null :
+                    <div
+                      className="alert alert-danger"
+                      role="alert"
+                    >
+                      Usuario o contraseña invalido
+                    </div>
+                  }
+
               <Link className="nav-link" onClick={() => { onClose(); openRegisterForm(); }}>¿No tienes una cuenta? Regístrate</Link>
               <br />
 
               <div>
                 <button className="btn btn-outline-dark text-dark" type="submit">Iniciar sesión</button>
               </div>
+
             </form>
           </div>
         </div>
@@ -85,5 +84,3 @@ export const Login = ({ isOpen, onClose, openRegisterForm }) => {
     </>
   );
 };
-
-
