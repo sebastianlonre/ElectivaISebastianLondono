@@ -36,7 +36,7 @@ export const NavBar = () => {
                                 <ul className="dropdown-menu dropdown-menu-light">
 
                                     <li>
-                                        <Link className="dropdown-item" to="/Profile">Mi perfil</Link>
+                                        <Link className="dropdown-item" to="/Profile">{user?.email}</Link>
                                     </li>
                                     <li>
                                         <Link className="dropdown-item" to="/pushProuduct">subir producto</Link>
@@ -59,9 +59,6 @@ export const NavBar = () => {
                         )}
                         {user && (
                             <>
-                                <li className="nav-item">
-                                    <Link className="nav-link" to="/Profile">{user?.username}</Link>
-                                </li>
                                 <li className="nav-item">
                                     <Link className="nav-link" to='/' onClick={logout}>Logout</Link>
                                 </li>
