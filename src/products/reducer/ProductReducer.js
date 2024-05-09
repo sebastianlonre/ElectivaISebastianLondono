@@ -23,6 +23,11 @@ export const ProductReducer = (state = {}, action) => {
         return{
           product: null
         }
+      case productTypes.getAllProducts:
+        return{
+          ...state,
+          product: action.payload
+        }
     default:
       return state;
   }

@@ -46,6 +46,23 @@ export const ProductProvider = ({ children }) => {
     }
   };
 
+  const fetchAllProducts = async () => {
+    try {
+      const querySnapshot = await getDocs(collection(FirebaseDB, "products"));
+      const products = [];
+
+      querySnapshot.forEach((doc) => {
+        const productData = doc.data();
+        products.push({ id: doc.id, ...productData });
+      });
+
+      const action = { type: productTypes.getAllProducts, payload: products };
+      dispatch(action);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const updateProduct = async ( updatedProduct ) => {
     try {
       const productRef = doc(FirebaseDB, "products", updatedProduct.id);
@@ -77,7 +94,8 @@ export const ProductProvider = ({ children }) => {
       saveProduct,
       fetchProductsByID,
       updateProduct,
-      deleteProduct
+      deleteProduct,
+      fetchAllProducts
     }}>
       {children}
     </ProductContext.Provider>

@@ -3,5 +3,6 @@ export const productTypes = {
   getProductByID: '[Product] getByID',
   updateProduct: '[Product] update',
   deleteProduct: '[Product] delete',
+  getAllProducts: '[Product] getAllProducts',
   error: '[Product] error',
 }
