@@ -1,11 +1,25 @@
 import { Link } from 'react-router-dom';
 import { Reviews } from '../components';
-import { ReviewFormModal } from '../../modals';
+import { ReviewFormModal, Register, Login } from '../../modals';
 import { useModal } from '../../modals/hooks/useModal';
+import { AuthContext } from '../../context/auth/AuthContext';
+import { useContext } from 'react';
 
 export const ViewProduct = () => {
 
+  const { user } =useContext(AuthContext);
+
   const reviewModal = useModal();
+  const loginModal = useModal();
+  const registerModal = useModal();
+
+  const shopProduct = () => {
+    if(user){
+      reviewModal.openModal();
+    }else{
+      loginModal.openModal();
+    }
+  }
 
   return (
     <div className="container mt-5">
@@ -30,12 +44,16 @@ export const ViewProduct = () => {
 
                 <p className="mt-3">etiquetas: tecnologia, camaras,</p>
                 <div className='d-flex flex-row'>
-                  <button className="btn btn-outline-dark text-dark mt-3 mr-2">
-                    <Link className="nav-link" to="/">comprar</Link>
+                  <button type='button' className="btn btn-outline-dark text-dark mt-3 mr-2" onClick={shopProduct}>
+                    comprar
                   </button>
-                  <button type='button' className="btn btn-outline-dark text-dark mt-3" onClick={reviewModal.openModal}>
-                  Subir reseña
-                  </button>
+                  {user &&(
+                    <>
+                      <button type='button' className="btn btn-outline-dark text-dark mt-3" onClick={reviewModal.openModal}>
+                      Subir reseña
+                      </button>
+                    </>
+                  )}
                 </div>
 
               </div>
@@ -52,6 +70,8 @@ export const ViewProduct = () => {
         <Reviews/>
       </div>
       <ReviewFormModal isOpen={reviewModal.isOpen} onClose={reviewModal.closeModal} />
+      <Register isOpen={registerModal.isOpen} onClose={registerModal.closeModal} openLoginForm={loginModal.openModal}/>
+      <Login isOpen={loginModal.isOpen} onClose={loginModal.closeModal} openRegisterForm={registerModal.openModal}/>
     </div>
   )
 }
