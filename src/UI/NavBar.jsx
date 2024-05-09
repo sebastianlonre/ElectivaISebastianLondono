@@ -39,7 +39,7 @@ export const NavBar = () => {
                                         <Link className="dropdown-item" to="/Profile">{user?.email}</Link>
                                     </li>
                                     <li>
-                                        <Link className="dropdown-item" to="/pushProuduct">subir producto</Link>
+                                        <Link className="dropdown-item" to="/Profile/pushProduct">subir producto</Link>
                                     </li>
                                 </ul>
                                 </li>
