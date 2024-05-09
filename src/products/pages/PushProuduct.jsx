@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react'
 import { Link } from 'react-router-dom';
 import { ProductContext } from '../context/'
+import { AuthContext } from '../../context/auth';
 
 export const PushProuduct = () => {
   const [productName, setProductName] = useState('');
@@ -8,6 +9,7 @@ export const PushProuduct = () => {
   const [selectedCategory, setSelectedCategory] = useState('');
 
   const { saveProduct } = useContext( ProductContext );
+  const { user } = useContext(AuthContext)
 
   const handleProductNameChange = (event) => {
     setProductName(event.target.value);
@@ -21,12 +23,21 @@ export const PushProuduct = () => {
     setSelectedCategory(event.target.getAttribute('data-value'));
   };
 
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('es-ES');
+  };
+
   const NewProduct = async (event) => {
+
     event.preventDefault();
     const newProduct = {
+      createdBy: user.uid,
       productName,
       productDescription,
       selectedCategory,
+      createdAt: formatDate(new Date().toISOString()),
+      updatedAt: formatDate(new Date().toISOString()),
     }
     await saveProduct(newProduct)
   };
