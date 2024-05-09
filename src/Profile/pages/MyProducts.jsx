@@ -3,6 +3,8 @@ import { ViewMyProducts } from "../Components/ViewMyProducts"
 export const MyProducts = () => {
   return (
     <>
+    <div className="mt-3">
+    <h3 className="m-3">Mis productos</h3>
       <table class="table">
         <thead>
           <tr>
@@ -17,6 +19,8 @@ export const MyProducts = () => {
         {<ViewMyProducts/>}
         </tbody>
       </table>
+    </div>
+
     </>
   )
 }

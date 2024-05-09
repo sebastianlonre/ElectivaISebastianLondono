@@ -21,7 +21,6 @@ export const Login = ({ isOpen, onClose, openRegisterForm }) => {
 
     if (isValidLogin) {
       onClose();
-      errorMessage=false;
     }
 
   };
