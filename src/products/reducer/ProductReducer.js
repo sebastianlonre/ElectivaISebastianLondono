@@ -19,6 +19,10 @@ export const ProductReducer = (state = {}, action) => {
             item.id === action.payload.id ? action.payload : item
           )
         };
+      case productTypes.deleteProduct:
+        return{
+          product: null
+        }
     default:
       return state;
   }

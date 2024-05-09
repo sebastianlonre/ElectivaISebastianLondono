@@ -1,7 +1,7 @@
 import { useContext, useReducer } from "react"
 import { ProductReducer } from "../reducer"
 import { AuthContext } from "../../context/auth"
-import { collection, doc, setDoc, getDocs, getDoc, updateDoc } from "firebase/firestore/lite"
+import { collection, doc, setDoc, getDocs, getDoc, updateDoc, deleteDoc } from "firebase/firestore/lite"
 import { FirebaseDB } from "../../firebase/connectionFireBase"
 import { productTypes } from "../types/types"
 import { ProductContext } from './'
@@ -58,13 +58,26 @@ export const ProductProvider = ({ children }) => {
     }
   };
 
+  const deleteProduct = async (product) => {
+    try {
+      const productRef = doc(FirebaseDB, "products", product.id);
+      await deleteDoc(productRef);
+
+      const action = { type: productTypes.deleteProduct, payload: product.id };
+      dispatch(action);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <ProductContext.Provider value=
     {{
       ...productState,
       saveProduct,
       fetchProductsByID,
-      updateProduct
+      updateProduct,
+      deleteProduct
     }}>
       {children}
     </ProductContext.Provider>
