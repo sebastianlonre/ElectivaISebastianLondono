@@ -66,9 +66,9 @@ export const AuthProvider = ({ children }) => {
     dispatch({ type: types.update, payload: updatedUserData });
   };
 
-  const register = async (email, password, displayName) => {
+  const register = async (email, password, displayName, bio) => {
     const { ok, errorMessage, photoURL, uid } = await registerUser({ email, displayName, password });
-
+  
     if (!ok) {
       
       if (errorMessage.includes('auth/email-already-in-use')) {
@@ -78,14 +78,16 @@ export const AuthProvider = ({ children }) => {
       }
       return false;
     }
-
-    const payload = { uid, email, photoURL, displayName }
+  
+    const currentDate = new Date().toISOString(); 
+  
+    const payload = { uid, email, photoURL, displayName, bio, createdAt: currentDate } 
     const action = { type: types.login, payload }
-
+  
     localStorage.setItem('user', JSON.stringify(payload))
-
+  
     dispatch(action);
-
+  
     return true;
   };
   
