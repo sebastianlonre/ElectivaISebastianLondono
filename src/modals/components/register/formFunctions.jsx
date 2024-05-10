@@ -9,10 +9,10 @@ export const handleSubmit = (formData, onClose) => {
 
   const newUser = {
     id: newUserId,
-    username: formData.username,
+    username: formData.displayName,
     email: formData.email,
     password: formData.password,
-    description: '', 
+    description: formData.bio || '', 
     createdAt: currentDate,
     updatedAt: currentDate
   };
