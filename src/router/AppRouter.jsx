@@ -19,7 +19,7 @@ export const AppRouter = () => {
                   </PrivateRoute>
                 }/>
 
-                <Route path="/ViewProduct"element={<ViewProduct/>}/>
+                <Route path="/ViewProduct/:productId"element={<ViewProduct/>}/>
 
                 <Route path="/*" element={<HomePage />} />
             </Route>

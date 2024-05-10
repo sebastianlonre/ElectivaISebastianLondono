@@ -9,8 +9,6 @@ import { useContext, useEffect } from "react";
         fetchAllProducts();
     }, [])
 
-
-
     return (
         <div className="container text-center">
         <h2 className="m-5">Productos más vendidos</h2>
