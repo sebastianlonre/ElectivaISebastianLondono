@@ -2,8 +2,7 @@ import React, { useEffect, useReducer } from 'react';
 import { AuthContext } from './AuthContext';
 import { authReducer } from '../reducers/AuthReducer';
 import { types } from '../types';
-import { signInUser, logoutUser, signInwithGoogle } from '../../firebase/firebaseProvider';
-
+import { signInUser, logoutUser, signInwithGoogle, registerUser } from '../../firebase/firebaseProvider';
 
 const initialState = { logged: false, user: null };
 
@@ -16,7 +15,6 @@ const init = () => {
 };
 
 export const AuthProvider = ({ children }) => {
-
   const [authState, dispatch] = useReducer(authReducer, initialState, init);
 
   const login = async (email='', password='') => {
@@ -27,7 +25,7 @@ export const AuthProvider = ({ children }) => {
       return false;
     }
 
-    const payload = {uid, email, photoURL, displayName, email}
+    const payload = { uid, email, photoURL, displayName }
 
     const action = { type: types.login, payload }
 
@@ -39,15 +37,14 @@ export const AuthProvider = ({ children }) => {
   };
 
   const loginGoogle = async () => {
-
-    const { ok, uid, photoURL, displayName, email: googleEmail , errorMessage } = await signInwithGoogle();
+    const { ok, uid, photoURL, displayName, email: googleEmail, errorMessage } = await signInwithGoogle();
 
     if (!ok) {
       dispatch({ type: types.error, payload: { errorMessage }})
       return false;
     }
 
-    const payload = {uid, googleEmail, photoURL, displayName}
+    const payload = { uid, googleEmail, photoURL, displayName }
 
     const action = { type: types.login, payload }
 
@@ -56,21 +53,42 @@ export const AuthProvider = ({ children }) => {
     dispatch(action);
 
     return true;
+  };
 
-
-  }
-
-  const logout = async () => {
+  const logout = async () => { 
     localStorage.removeItem('user');
-    const action ={type: types.logout}
+    const action = { type: types.logout }
     logoutUser();
-    dispatch(action)
+    dispatch(action);
   };
 
   const updateUser = (updatedUserData) => {
     dispatch({ type: types.update, payload: updatedUserData });
   };
 
+  const register = async (email, password, displayName) => {
+    const { ok, errorMessage, photoURL, uid } = await registerUser({ email, displayName, password });
+
+    if (!ok) {
+      
+      if (errorMessage.includes('auth/email-already-in-use')) {
+        dispatch({ type: types.error, payload: { errorMessage: 'Este correo electrónico ya está en uso.' } });
+      } else {
+        dispatch({ type: types.error, payload: { errorMessage } });
+      }
+      return false;
+    }
+
+    const payload = { uid, email, photoURL, displayName }
+    const action = { type: types.login, payload }
+
+    localStorage.setItem('user', JSON.stringify(payload))
+
+    dispatch(action);
+
+    return true;
+  };
+  
   return (
     <AuthContext.Provider
       value={{
@@ -78,6 +96,7 @@ export const AuthProvider = ({ children }) => {
         login,
         logout,
         loginGoogle,
+        register,
         updateUser
       }}
     >
