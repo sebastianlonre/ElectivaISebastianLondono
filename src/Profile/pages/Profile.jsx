@@ -1,19 +1,19 @@
-import { Link } from "react-router-dom"
+import { Link } from "react-router-dom";
 import { AuthContext } from '../../context/auth/AuthContext';
 import { useContext, useState, useEffect } from "react";
 
 export const Profile = () => {
-  const { user, updateUser } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
   const [formState, setFormState] = useState({
-    username: user?.username,
+    username: user?.displayName,
     email: user?.email,
-    password: user?.password,
-    description: user?.description
+    password: '',
+    description: user?.bio || ''
   });
 
   const handleUpdate = (e) => {
     e.preventDefault();
-    updateUser(formState);
+    
   };
 
   const handleChange = (e) => {
@@ -33,12 +33,12 @@ export const Profile = () => {
               className="border border-gray border-5 img-fluid"
               alt="Imagen Redonda"
             />
-            <h2 className="text-white ms-auto me-5">{user?.username}</h2>
           </div>
           <form onSubmit={handleUpdate}>
             <br/>
             <h3>Mi perfil</h3>
-            <p className="ms-auto me-5">creado el: {user?.createdAt}</p>
+            <p className="ms-auto me-5">Creado el: {user?.createdAt && new Date(user.createdAt).toLocaleDateString()}</p>
+            {}
             <br></br>
             <div className="input-group mb-3">
               <input
@@ -47,7 +47,7 @@ export const Profile = () => {
                 className="form-control"
                 aria-label="Sizing example input"
                 aria-describedby="inputGroup-sizing-default"
-                placeholder={user?.username}
+                placeholder={user?.displayName}
                 value={formState.username}
                 onChange={handleChange}
                 name="username"
@@ -61,7 +61,7 @@ export const Profile = () => {
                 className="form-control"
                 aria-label="Sizing example input"
                 aria-describedby="inputGroup-sizing-default"
-                placeholder={formState.email}
+                placeholder={user?.email}
                 value={formState.email}
                 onChange={handleChange}
                 name="email"
@@ -75,7 +75,7 @@ export const Profile = () => {
                 className="form-control"
                 aria-label="Sizing example input"
                 aria-describedby="inputGroup-sizing-default"
-                placeholder={formState.password}
+                placeholder="Nueva Contraseña"
                 value={formState.password}
                 onChange={handleChange}
                 name="password"
@@ -84,13 +84,13 @@ export const Profile = () => {
 
             <div className="input-group mb-3">
               <textarea
-                class="form-control"
-                id="exampleFormControlTextarea1"
+                className="form-control"
+                id="bio"
+                name="bio"
                 rows="3"
-                placeholder={formState.description}
+                placeholder="Bio"
                 value={formState.description}
                 onChange={handleChange}
-                name="description"
               ></textarea>
             </div>
 
@@ -104,5 +104,5 @@ export const Profile = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
