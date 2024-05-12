@@ -28,11 +28,6 @@ export const ProductReducer = (state = {}, action) => {
           ...state,
           product: action.payload
         }
-      case productTypes.prevProduct:
-        return{
-          ...state,
-          prevProduct: action.payload
-        }
     default:
       return state;
   }
