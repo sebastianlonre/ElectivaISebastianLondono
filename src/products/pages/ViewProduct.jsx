@@ -1,22 +1,26 @@
-import {  useParams } from 'react-router-dom';
+import {  useNavigate, useParams } from 'react-router-dom';
 import { Reviews } from '../components';
 import { ReviewFormModal, Register, Login } from '../../modals';
 import { useModal } from '../../modals/hooks/useModal';
 import { AuthContext } from '../../context/auth/AuthContext';
 import { useContext } from 'react';
+import { reviewRate } from "../../reviews/components/reviewRate";
 
 export const ViewProduct = () => {
 
   const { user } =useContext(AuthContext);
   let { productId, productName, productDescription, productTicket, price } = useParams();
+  const avgRating = reviewRate(productId);
 
   const reviewModal = useModal();
   const loginModal = useModal();
   const registerModal = useModal();
+  const navigate = useNavigate();
 
   const shopProduct = () => {
     if(user){
-      reviewModal.openModal();
+      console.log("comprado");
+      navigate("/");
     }else{
       loginModal.openModal();
     }
@@ -37,7 +41,10 @@ export const ViewProduct = () => {
               </div>
               <div className="col-md-6">
                 <div className='description-div'>
-                    <h2>{productName}</h2>
+                    <div className='d-flex'>
+                      <h2>{productName}</h2>
+                      <h5 className="mt-4 rate-margin">{avgRating}⭐</h5>
+                    </div>
                     <h5 className="text-secondary">id: {productId}</h5>
                   <p>Subido por: {user?.email}</p>
                   <p className='mt-4'>{productDescription}</p>
