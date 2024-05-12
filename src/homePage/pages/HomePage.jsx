@@ -5,9 +5,8 @@ export const HomePage = () => {
   return (
     <>
     <div>
-      <div className="container text-center mt-5">
+      <div className="container mt-2">
         <div className="row">
-            <Carousel/>
             <ProductGrid />
         </div>
       </div>
