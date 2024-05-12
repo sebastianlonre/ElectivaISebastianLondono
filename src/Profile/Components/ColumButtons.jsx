@@ -15,6 +15,7 @@ export const ColumButtons = ({ product }) => {
 
   const deleteProductACC = async () => {
     await deleteProduct(product);
+
   }
 
   return (
