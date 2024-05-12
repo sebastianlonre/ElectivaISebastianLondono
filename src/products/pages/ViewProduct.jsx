@@ -72,7 +72,7 @@ export const ViewProduct = () => {
       </div>
 
       <div className="mt-5">
-        <Reviews/>
+        <Reviews reviewId={productId}/>
       </div>
       <ReviewFormModal isOpen={reviewModal.isOpen} onClose={reviewModal.closeModal} productId={productId} />
       <Register isOpen={registerModal.isOpen} onClose={registerModal.closeModal} openLoginForm={loginModal.openModal}/>

@@ -2,7 +2,7 @@ import { useReducer } from "react"
 import { reviewReducer } from "../reducer"
 import { reviewContext } from "."
 import { FirebaseDB } from "../../firebase/connectionFireBase"
-import { doc, collection, setDoc } from "firebase/firestore/lite"
+import { doc, collection, setDoc, getDocs } from "firebase/firestore/lite"
 import { reviewTypes } from "../types"
 
 const initialState = {
@@ -25,10 +25,28 @@ export const ReviewProvider = ({children}) => {
     }
   }
 
+  const getReviews = async ( productID ) => {
+    try {
+      const reviewsCollection = collection(FirebaseDB, `products/${productID.reviewId}/reviews`);
+      const querySnapshot = await getDocs(reviewsCollection);
+      const reviews = [];
+
+      querySnapshot.forEach((doc) => {
+        reviews.push({ id: doc.id, ...doc.data() });
+      });
+
+      const action = { type: reviewTypes.getReviews, payload: reviews };
+      dispatch(action);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return(
     <reviewContext.Provider value={{
       ...reviewState,
-      saveReview
+      saveReview,
+      getReviews
     }}>
       {children}
     </reviewContext.Provider>
