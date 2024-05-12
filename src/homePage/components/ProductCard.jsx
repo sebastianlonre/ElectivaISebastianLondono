@@ -17,12 +17,15 @@ export const ProductCard = ({ product }) => {
         </div>
         <div className="col-md-8">
           <div className="card-body">
-            <div className="d-flex">
               <h5 className="card-title">{product.productName}</h5>
-            </div>
             <p className="card-text" >{product.productDescription.length > 35 ? `${product.productDescription.substring(0, 35)}...` : product.productDescription}</p>
             <p className="price-text">${product.price}</p>
-            <p className="card-text"><small className="text-muted">{avgRating} ⭐</small></p>
+            <div className="d-flex">
+              <p className="card-text"><small className="text-muted">{avgRating} ⭐</small></p>
+              <p className="card-text"><small className="text-muted ">subido: {product.updatedAt}</small></p>
+
+            </div>
+
           </div>
         </div>
       </div>

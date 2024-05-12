@@ -41,11 +41,9 @@ export const ViewProduct = () => {
               </div>
               <div className="col-md-6">
                 <div className='description-div'>
-                    <div className='d-flex'>
-                      <h2>{productName}</h2>
-                      <h5 className="mt-4 rate-margin">{avgRating}⭐</h5>
-                    </div>
-                    <h5 className="text-secondary">id: {productId}</h5>
+                <h2>{productName}</h2>
+                <h5 className="text-secondary">id: {productId}</h5>
+                <h5 className="mt-2 rate-margin">{avgRating}⭐</h5>
                   <p>Subido por: {user?.email}</p>
                   <p className='mt-4'>{productDescription}</p>
                 </div>
