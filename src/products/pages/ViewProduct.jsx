@@ -1,4 +1,4 @@
-import { Link, useLocation } from 'react-router-dom';
+import {  useParams } from 'react-router-dom';
 import { Reviews } from '../components';
 import { ReviewFormModal, Register, Login } from '../../modals';
 import { useModal } from '../../modals/hooks/useModal';
@@ -8,6 +8,7 @@ import { useContext } from 'react';
 export const ViewProduct = () => {
 
   const { user } =useContext(AuthContext);
+  let { productId, productName, productDescription, productTicket, price } = useParams();
 
   const reviewModal = useModal();
   const loginModal = useModal();
@@ -26,7 +27,6 @@ export const ViewProduct = () => {
       <div className="justify-content-center align-items-center">
         <div className="card p-4">
           <form>
-            <h2>Nombre del producto</h2>
             <br />
             <div className="row">
               <div className="col-md-6">
@@ -36,13 +36,16 @@ export const ViewProduct = () => {
                 />
               </div>
               <div className="col-md-6">
-                <div>
-                  <h3>Link del producto</h3>
-                  <p>usuario</p>
-                  <p className='mt-4'>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facere, voluptate aperiam voluptas voluptatum numquam optio, voluptatem accusamus soluta reiciendis, obcaecati fugiat illum quasi porro. Et consequuntur sequi illo aut minus.</p>
+                <div className='description-div'>
+                    <h2>{productName}</h2>
+                    <h5 className="text-secondary">id: {productId}</h5>
+                  <p>Subido por: {user?.email}</p>
+                  <p className='mt-4'>{productDescription}</p>
+                </div>
+                <div className='d-flex'>
+                  <p className="mt-3">etiqueta: { productTicket }</p>
                 </div>
 
-                <p className="mt-3">etiquetas: tecnologia, camaras,</p>
                 <div className='d-flex flex-row'>
                   <button type='button' className="btn btn-outline-dark text-dark mt-3 mr-2" onClick={shopProduct}>
                     comprar
@@ -54,6 +57,7 @@ export const ViewProduct = () => {
                       </button>
                     </>
                   )}
+                   <h5 className="mt-4 price-margin">${price}</h5>
                 </div>
 
               </div>
@@ -66,6 +70,7 @@ export const ViewProduct = () => {
           </form>
         </div>
       </div>
+
       <div className="mt-5">
         <Reviews/>
       </div>

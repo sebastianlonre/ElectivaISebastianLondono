@@ -7,7 +7,7 @@ export const ViewMyProducts = () => {
 
   useEffect(() => {
     fetchProductsByID();
-  }, []);
+  }, [product]);
 
   return (
     <>

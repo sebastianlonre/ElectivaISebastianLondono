@@ -5,4 +5,5 @@ export const productTypes = {
   deleteProduct: '[Product] delete',
   getAllProducts: '[Product] getAllProducts',
   error: '[Product] error',
+  prevProduct : '[Product] prevProduct'
 }

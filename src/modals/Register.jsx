@@ -21,7 +21,7 @@ export const Register = ({ isOpen, onClose, openLoginForm }) => {
     if (isValidRegister) {
       const lastPath = localStorage.getItem('lastPath') || '/';
       navigate(lastPath, { replace: true });
-      onClose(); 
+      onClose();
     }
   };
 
@@ -78,7 +78,7 @@ export const Register = ({ isOpen, onClose, openLoginForm }) => {
                   placeholder="Bio"
                 ></textarea>
               </div>
-              <button type="submit" onClick={onRegister}>
+              <button className="btn btn-outline-primary mt-3" type="submit" onClick={onRegister}>
                 Registrarse
               </button>
               <br />

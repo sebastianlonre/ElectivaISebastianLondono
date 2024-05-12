@@ -13,7 +13,7 @@ export const Profile = () => {
 
   const handleUpdate = (e) => {
     e.preventDefault();
-    
+
   };
 
   const handleChange = (e) => {
@@ -29,7 +29,7 @@ export const Profile = () => {
         <div className="col-md-10  bg-light">
           <div className="bg-purple d-flex align-items-center">
             <img
-              src="https://misanimales.com/wp-content/uploads/2019/02/tipos-de-picos-de-aves-150x150.jpg"
+              src={user?.photoURL}
               className="border border-gray border-5 img-fluid"
               alt="Imagen Redonda"
             />

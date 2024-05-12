@@ -4,12 +4,15 @@ import { ProductContext } from '../context/'
 import { AuthContext } from '../../context/auth';
 
 export const PushProuduct = () => {
+
+  const { saveProduct } = useContext( ProductContext );
+  const { user } = useContext(AuthContext);
+
   const [productName, setProductName] = useState('');
   const [productDescription, setProductDescription] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
+  const [price, setPrice] = useState('');
 
-  const { saveProduct } = useContext( ProductContext );
-  const { user } = useContext(AuthContext)
 
   const handleProductNameChange = (event) => {
     setProductName(event.target.value);
@@ -21,6 +24,10 @@ export const PushProuduct = () => {
 
   const handleCategoryChange = (event) => {
     setSelectedCategory(event.target.getAttribute('data-value'));
+  };
+
+  const handlePriceChange = (event) => {
+    setPrice(event.target.value);
   };
 
   const formatDate = (dateString) => {
@@ -36,6 +43,7 @@ export const PushProuduct = () => {
       productName,
       productDescription,
       selectedCategory,
+      price,
       createdAt: formatDate(new Date().toISOString()),
       updatedAt: formatDate(new Date().toISOString()),
     }
@@ -72,9 +80,20 @@ export const PushProuduct = () => {
                     onChange={handleProductDescriptionChange}
                   />
                 </div>
+
               </div>
               <div className="col-md-6">
                 <div>
+                  <div className="mb-3">
+                    <input
+                      type="number"
+                      required
+                      className="form-control"
+                      placeholder="precio"
+                      value={price}
+                      onChange={handlePriceChange}
+                    />
+                  </div>
                   <div className="dropdown">
                     <button className="btn btn-outline-dark text-dark dropdown-toggle form-control" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                       {selectedCategory ? `${selectedCategory}` : 'Categoría'}

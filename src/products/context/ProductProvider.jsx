@@ -7,7 +7,8 @@ import { productTypes } from "../types/types"
 import { ProductContext } from './'
 
 const initialState = {
-  product: []
+  product: [],
+  prevProduct: []
 }
 
 export const ProductProvider = ({ children }) => {
@@ -26,6 +27,11 @@ export const ProductProvider = ({ children }) => {
       console.log(error);
     }
   };
+
+  const savePreProduct = ( product ) =>{
+    const action = {type: productTypes.prevProduct, prevProduct: product}
+    dispatch(action);
+  }
 
   const fetchProductsByID = async () => {
     try {
@@ -95,7 +101,8 @@ export const ProductProvider = ({ children }) => {
       fetchProductsByID,
       updateProduct,
       deleteProduct,
-      fetchAllProducts
+      fetchAllProducts,
+      savePreProduct
     }}>
       {children}
     </ProductContext.Provider>
