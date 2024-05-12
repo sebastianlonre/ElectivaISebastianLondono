@@ -5,13 +5,16 @@ import { BrowserRouter } from 'react-router-dom'
 import './styles.css'
 import { AuthProvider } from './context/auth/AuthProvider.jsx'
 import { ProductProvider } from './products/context/index.js'
+import { ReviewProvider } from './reviews/context/ReviewProvider.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <BrowserRouter>
       <AuthProvider>
         <ProductProvider>
-          <App />
+          <ReviewProvider>
+            <App />
+          </ReviewProvider>
         </ProductProvider>
       </AuthProvider>
     </BrowserRouter>

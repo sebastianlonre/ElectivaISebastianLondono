@@ -74,7 +74,7 @@ export const ViewProduct = () => {
       <div className="mt-5">
         <Reviews/>
       </div>
-      <ReviewFormModal isOpen={reviewModal.isOpen} onClose={reviewModal.closeModal} />
+      <ReviewFormModal isOpen={reviewModal.isOpen} onClose={reviewModal.closeModal} productId={productId} />
       <Register isOpen={registerModal.isOpen} onClose={registerModal.closeModal} openLoginForm={loginModal.openModal}/>
       <Login isOpen={loginModal.isOpen} onClose={loginModal.closeModal} openRegisterForm={registerModal.openModal}/>
     </div>
