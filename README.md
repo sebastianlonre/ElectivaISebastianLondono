@@ -2,6 +2,7 @@
 
 ## integrantes
 - Sebastián Londoño Restrepo
+- Juan Esteban Tobón Duque
 
 ## Tecnologia en que se desarrollo
 - react
@@ -11,10 +12,9 @@ niah, tu tiend virtual
 
 ## como correr el proyecto
 1. Clonar el repositorio
-git clone https://github.com/sebastianlonre/ElectivaISebastianLondono
-
+git clone https://github.com/sebastianlonre/ElectivaISebastianLondonoJuanTobon.git
 2. Cambiar al directorio del proyecto
-cd ElectivaISebastianLondono
+cd ElectivaISebastianLondonoJuanTobon
 
 3. Instalar dependencias
 npm install
