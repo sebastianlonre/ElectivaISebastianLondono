@@ -1,14 +1,15 @@
-import { 
-  createUserWithEmailAndPassword, 
-  signInWithEmailAndPassword, 
-  signInWithPopup, 
-  updateProfile, 
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  updateProfile,
   GoogleAuthProvider} from "firebase/auth";
-import { FirebaseAuth } from "./connectionFireBase";
+import { FirebaseAuth, FirebaseStorage } from "./connectionFireBase";
+import { ref, uploadBytes, getStorage, getDownloadURL } from "firebase/storage";
+import {v4} from 'uuid'
 
 
-
-  const GoogleProvider = new GoogleAuthProvider();
+const GoogleProvider = new GoogleAuthProvider();
 
 export const signInwithGoogle = async () => {
 
@@ -18,7 +19,7 @@ export const signInwithGoogle = async () => {
   try {
       const result = await signInWithPopup(FirebaseAuth, GoogleProvider);
       const {uid, photoURL, displayName, email } = result.user
-    
+
       return{
         ok:true,
         displayName,email,photoURL,uid
@@ -43,10 +44,10 @@ export const signInwithGoogle = async () => {
     const result = await createUserWithEmailAndPassword(FirebaseAuth, email, password);
 
     await updateProfile(FirebaseAuth.currentUser, { displayName });
-    
+
     const { uid, photoURL } = result.user
 
-    
+
 
     return {
       ok: true,
@@ -87,3 +88,15 @@ export const signInUser = async (email, password) => {
   }
 }
 
+export const uploadImg = async ( img, folder ) => {
+  try {
+
+    const storage = getStorage();
+    const storageRef = ref(storage, `${folder}/${v4()}`);
+    await uploadBytes(storageRef, img);
+    const url = await getDownloadURL(storageRef)
+    return url
+  } catch (error) {
+    console.log(error)
+  }
+}
