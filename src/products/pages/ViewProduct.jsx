@@ -9,7 +9,8 @@ import { reviewRate } from "../../reviews/components/reviewRate";
 export const ViewProduct = () => {
 
   const { user } =useContext(AuthContext);
-  let { productId, productName, productDescription, productTicket, price } = useParams();
+  let { productId, productName, productDescription, productTicket, price, imgURL } = useParams();
+  const img = decodeURI(imgURL);
   const avgRating = reviewRate(productId);
 
   const reviewModal = useModal();
@@ -35,7 +36,7 @@ export const ViewProduct = () => {
             <div className="row">
               <div className="col-md-6">
                 <img
-                src="https://sony.scene7.com/is/image/sonyglobalsolutions/529_category?$goldenAreaImage$&fmt=png-alpha"
+                src={img}
                 className=" img-fluid"
                 />
               </div>
