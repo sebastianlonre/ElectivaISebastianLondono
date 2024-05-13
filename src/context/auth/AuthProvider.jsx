@@ -55,7 +55,7 @@ export const AuthProvider = ({ children }) => {
     return true;
   };
 
-  const logout = async () => { 
+  const logout = async () => {
     localStorage.removeItem('user');
     const action = { type: types.logout }
     logoutUser();
@@ -68,9 +68,9 @@ export const AuthProvider = ({ children }) => {
 
   const register = async (email, password, displayName, bio) => {
     const { ok, errorMessage, photoURL, uid } = await registerUser({ email, displayName, password });
-  
+
     if (!ok) {
-      
+
       if (errorMessage.includes('auth/email-already-in-use')) {
         dispatch({ type: types.error, payload: { errorMessage: 'Este correo electrónico ya está en uso.' } });
       } else {
@@ -78,19 +78,19 @@ export const AuthProvider = ({ children }) => {
       }
       return false;
     }
-  
-    const currentDate = new Date().toISOString(); 
-  
-    const payload = { uid, email, photoURL, displayName, bio, createdAt: currentDate } 
+
+    const currentDate = new Date().toISOString();
+
+    const payload = { uid, email, photoURL, displayName, bio, createdAt: currentDate }
     const action = { type: types.login, payload }
-  
+
     localStorage.setItem('user', JSON.stringify(payload))
-  
+
     dispatch(action);
-  
+
     return true;
   };
-  
+
   return (
     <AuthContext.Provider
       value={{

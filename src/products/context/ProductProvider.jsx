@@ -1,10 +1,11 @@
 import { useContext, useReducer } from "react"
 import { ProductReducer } from "../reducer"
 import { AuthContext } from "../../context/auth"
-import { collection, doc, setDoc, getDocs, getDoc, updateDoc, deleteDoc } from "firebase/firestore/lite"
-import { FirebaseDB } from "../../firebase/connectionFireBase"
+import { collection, doc, setDoc, getDocs, updateDoc, deleteDoc } from "firebase/firestore/lite"
+import { FirebaseDB, FirebaseStorage } from "../../firebase/connectionFireBase"
 import { productTypes } from "../types/types"
 import { ProductContext } from './'
+import { getStorage, ref, uploadBytes } from "firebase/storage"
 
 const initialState = {
   product: []
@@ -12,6 +13,7 @@ const initialState = {
 
 export const ProductProvider = ({ children }) => {
   const [productState, dispatch] = useReducer(ProductReducer, initialState);
+
 
   const { user } = useContext(AuthContext);
 

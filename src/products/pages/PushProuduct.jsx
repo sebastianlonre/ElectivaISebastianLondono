@@ -1,15 +1,18 @@
 import React, { useContext, useState } from 'react'
-import { Link, Navigate } from 'react-router-dom';
 import { ProductContext } from '../context/'
 import { AuthContext } from '../../context/auth';
+import { uploadImg } from '../../firebase/firebaseProvider';
 
 export const PushProuduct = () => {
+
+  const { saveProduct } = useContext( ProductContext );
+  const { user } = useContext(AuthContext);
+
   const [productName, setProductName] = useState('');
   const [productDescription, setProductDescription] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
+  const [price, setPrice] = useState('');
 
-  const { saveProduct } = useContext( ProductContext );
-  const { user } = useContext(AuthContext)
 
   const handleProductNameChange = (event) => {
     setProductName(event.target.value);
@@ -23,19 +26,36 @@ export const PushProuduct = () => {
     setSelectedCategory(event.target.getAttribute('data-value'));
   };
 
+  const handlePriceChange = (event) => {
+    setPrice(event.target.value);
+  };
+
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleDateString('es-ES');
   };
 
+  const [file, setFile] = useState(null);
+
+  const handleFileChange = (event) => {
+    setFile(event.target.files[0]);
+  };
+
+
   const NewProduct = async (event) => {
 
     event.preventDefault();
+
+    const folder = "productsPhoto";
+    const imgURL = await uploadImg(file, folder);
+
     const newProduct = {
       createdBy: user.uid,
       productName,
       productDescription,
       selectedCategory,
+      price,
+      imgURL: `${imgURL}`,
       createdAt: formatDate(new Date().toISOString()),
       updatedAt: formatDate(new Date().toISOString()),
     }
@@ -72,6 +92,8 @@ export const PushProuduct = () => {
                     onChange={handleProductDescriptionChange}
                   />
                 </div>
+
+
               </div>
               <div className="col-md-6">
                 <div>
@@ -87,10 +109,19 @@ export const PushProuduct = () => {
                       <li><a className="dropdown-item" data-value="Celulares Iphone" onClick={handleCategoryChange}>Celulares Iphone</a></li>
                     </ul>
                   </div>
+                  <div className="mt-3">
+                    <input
+                      type="number"
+                      required
+                      className="form-control"
+                      placeholder="precio"
+                      value={price}
+                      onChange={handlePriceChange}
+                    />
+                  </div>
+
                   <div className='mt-3'>
-                    <button className="btn btn-outline-dark text-dark form-control">
-                      <Link className="nav-link" to="/">subir imagen</Link>
-                    </button>
+                    <input type="file" className="btn btn-outline-dark text-dark form-control" onChange={handleFileChange}/>
                   </div>
                 </div>
               </div>

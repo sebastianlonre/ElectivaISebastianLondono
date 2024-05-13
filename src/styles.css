@@ -19,3 +19,30 @@
   .button-margin{
     margin-right: 4px;
   }
+
+  .description-div{
+    height: 200px;
+    width: 500px;
+  }
+
+  .description-div2{
+    height: 50px;
+    width: 200px;
+    margin-left: 1.5%;
+  }
+
+  .price-margin{
+    margin-left: 40%;
+  }
+
+  .price-text{
+    font-size: 15px;
+  }
+
+  .rate-margin{
+    margin-left: 73%;
+  }
+
+  .date-margin{
+    margin-left: 20%;
+  }
