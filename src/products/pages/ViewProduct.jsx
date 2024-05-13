@@ -1,4 +1,4 @@
-import {  useNavigate, useParams } from 'react-router-dom';
+import {  useNavigate, useLocation } from 'react-router-dom';
 import { Reviews } from '../components';
 import { ReviewFormModal, Register, Login } from '../../modals';
 import { useModal } from '../../modals/hooks/useModal';
@@ -6,12 +6,12 @@ import { AuthContext } from '../../context/auth/AuthContext';
 import { useContext } from 'react';
 import { reviewRate } from "../../reviews/components/reviewRate";
 
-export const ViewProduct = () => {
+export const ViewProduct = ({}) => {
 
+  const location = useLocation();
+  const { state: { product } } = location;
   const { user } =useContext(AuthContext);
-  let { productId, productName, productDescription, productTicket, price, imgURL } = useParams();
-  const img = decodeURI(imgURL);
-  const avgRating = reviewRate(productId);
+  const avgRating = reviewRate(product.id);
 
   const reviewModal = useModal();
   const loginModal = useModal();
@@ -35,21 +35,23 @@ export const ViewProduct = () => {
             <br />
             <div className="row">
               <div className="col-md-6">
-                <img
-                src={img}
-                className=" img-fluid"
-                />
+                <div className='div-IMG'>
+                  <img
+                  src={product.imgURL}
+                  className=" img-fluid"
+                  />
+                </div>
               </div>
               <div className="col-md-6">
                 <div className='description-div'>
-                <h2>{productName}</h2>
-                <h5 className="text-secondary">id: {productId}</h5>
+                <h2>{product.productName}</h2>
+                <h5 className="text-secondary">id: {product.id}</h5>
                 <h5 className="mt-2 rate-margin">{avgRating}⭐</h5>
                   <p>Subido por: {user?.email}</p>
-                  <p className='mt-4'>{productDescription}</p>
+                  <p className='mt-4'>{product.productDescription}</p>
                 </div>
                 <div className='d-flex'>
-                  <p className="mt-3">etiqueta: { productTicket }</p>
+                  <p className="mt-3">etiqueta: { product.selectedCategory }</p>
                 </div>
 
                 <div className='d-flex flex-row'>
@@ -63,7 +65,7 @@ export const ViewProduct = () => {
                       </button>
                     </>
                   )}
-                   <h5 className="mt-4 price-margin">${price}</h5>
+                   <h5 className="mt-4 price-margin">${product.price}</h5>
                 </div>
 
               </div>
@@ -78,9 +80,9 @@ export const ViewProduct = () => {
       </div>
 
       <div className="mt-5">
-        <Reviews reviewId={productId}/>
+        <Reviews reviewId={product.id}/>
       </div>
-      <ReviewFormModal isOpen={reviewModal.isOpen} onClose={reviewModal.closeModal} productId={productId} />
+      <ReviewFormModal isOpen={reviewModal.isOpen} onClose={reviewModal.closeModal} productId={product.id} />
       <Register isOpen={registerModal.isOpen} onClose={registerModal.closeModal} openLoginForm={loginModal.openModal}/>
       <Login isOpen={loginModal.isOpen} onClose={loginModal.closeModal} openRegisterForm={registerModal.openModal}/>
     </div>
