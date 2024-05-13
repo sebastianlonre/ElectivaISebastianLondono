@@ -31,6 +31,7 @@ export const ReviewFormModal = ({ isOpen, onClose, productId }) => {
       createdAt: formatDate(new Date().toISOString()),
     }
     await saveReview(review, productId)
+    location. reload()
   }
 
   return (

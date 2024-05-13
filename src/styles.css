@@ -31,6 +31,29 @@
     margin-left: 1.5%;
   }
 
+  .div-IMG{
+    width:350px;
+    height:350px;
+    margin-left: 5%;
+  }
+
+  .div-IMG img{
+    object-fit: cover;
+    width:100%;
+    height:100%;
+  }
+
+  .div-IMG-cart{
+    width:150px;
+    height:150px;
+    margin: 10%;
+  }
+  .div-IMG-cart img{
+    object-fit: cover;
+    width:100%;
+    height:100%;
+  }
+
   .price-margin{
     margin-left: 40%;
   }

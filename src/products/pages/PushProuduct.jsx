@@ -2,12 +2,13 @@ import React, { useContext, useState } from 'react'
 import { ProductContext } from '../context/'
 import { AuthContext } from '../../context/auth';
 import { uploadImg } from '../../firebase/firebaseProvider';
+import { useNavigate } from 'react-router-dom';
 
 export const PushProuduct = () => {
 
   const { saveProduct } = useContext( ProductContext );
   const { user } = useContext(AuthContext);
-
+  const navigate = useNavigate();
   const [productName, setProductName] = useState('');
   const [productDescription, setProductDescription] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
@@ -43,7 +44,6 @@ export const PushProuduct = () => {
 
 
   const NewProduct = async (event) => {
-
     event.preventDefault();
 
     const folder = "productsPhoto";
@@ -60,7 +60,8 @@ export const PushProuduct = () => {
       updatedAt: formatDate(new Date().toISOString()),
     }
     await saveProduct(newProduct)
-
+    navigate("/HomePage")
+    location. reload()
   };
 
   return (
@@ -121,7 +122,7 @@ export const PushProuduct = () => {
                   </div>
 
                   <div className='mt-3'>
-                    <input type="file" className="btn btn-outline-dark text-dark form-control" onChange={handleFileChange}/>
+                    <input type="file" accept="image/*" className="btn btn-outline-dark text-dark form-control " onChange={handleFileChange}/>
                   </div>
                 </div>
               </div>
