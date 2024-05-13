@@ -67,17 +67,7 @@ export const Register = ({ isOpen, onClose, openLoginForm }) => {
                   placeholder="Contraseña"
                 />
               </div>
-              <div className="input-group mb-3">
-                <textarea
-                  className="form-control"
-                  id="bio"
-                  name="bio"
-                  rows="3"
-                  value={bio}
-                  onChange={onInputChange}
-                  placeholder="Bio"
-                ></textarea>
-              </div>
+              
               <button className="btn btn-outline-primary mt-3" type="submit" onClick={onRegister}>
                 Registrarse
               </button>

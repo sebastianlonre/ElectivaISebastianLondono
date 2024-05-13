@@ -2,7 +2,7 @@ import React, { useEffect, useReducer } from 'react';
 import { AuthContext } from './AuthContext';
 import { authReducer } from '../reducers/AuthReducer';
 import { types } from '../types';
-import { signInUser, logoutUser, signInwithGoogle, registerUser } from '../../firebase/firebaseProvider';
+import { signInUser, logoutUser, signInwithGoogle, registerUser, updateUser  } from '../../firebase/firebaseProvider';
 
 const initialState = { logged: false, user: null };
 
@@ -62,15 +62,10 @@ export const AuthProvider = ({ children }) => {
     dispatch(action);
   };
 
-  const updateUser = (updatedUserData) => {
-    dispatch({ type: types.update, payload: updatedUserData });
-  };
-
   const register = async (email, password, displayName, bio) => {
     const { ok, errorMessage, photoURL, uid } = await registerUser({ email, displayName, password });
 
     if (!ok) {
-
       if (errorMessage.includes('auth/email-already-in-use')) {
         dispatch({ type: types.error, payload: { errorMessage: 'Este correo electrónico ya está en uso.' } });
       } else {
@@ -91,6 +86,17 @@ export const AuthProvider = ({ children }) => {
     return true;
   };
 
+  const updateUserProfile = async (updatedUserData) => {
+    const { ok, errorMessage } = await updateUser(authState.user.uid, updatedUserData);
+
+    if (!ok) {
+      console.error(errorMessage);
+     
+    } else {
+      dispatch({ type: types.update, payload: updatedUserData });
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -99,7 +105,7 @@ export const AuthProvider = ({ children }) => {
         logout,
         loginGoogle,
         register,
-        updateUser
+        updateUserProfile
       }}
     >
       {children}
