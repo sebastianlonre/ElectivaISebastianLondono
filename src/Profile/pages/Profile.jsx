@@ -1,19 +1,84 @@
-import { Link } from "react-router-dom";
+import React, { useContext, useState, useEffect } from "react";
 import { AuthContext } from '../../context/auth/AuthContext';
-import { useContext, useState, useEffect } from "react";
+import { getDoc, doc, getFirestore } from "firebase/firestore";
 
 export const Profile = () => {
-  const { user } = useContext(AuthContext);
+  const { user, updateUserProfile, updateUserProfileImageInContext } = useContext(AuthContext);
   const [formState, setFormState] = useState({
-    username: user?.displayName,
-    email: user?.email,
+    username: user?.displayName || '',
+    email: user?.email || '',
     password: '',
-    description: user?.bio || ''
+    bio: '',
+    createdAt: '',
+    updatedAt: ''
   });
+  const [updateMessage, setUpdateMessage] = useState(null);
+  const [selectedImage, setSelectedImage] = useState(null);
 
-  const handleUpdate = (e) => {
+  useEffect(() => {
+    const loadUserData = async () => {
+      try {
+        const db = getFirestore();
+        const userRef = doc(db, 'users', user.uid);
+        const userSnapshot = await getDoc(userRef);
+
+        if (userSnapshot.exists()) {
+          const userData = userSnapshot.data();
+          setFormState(prevState => ({
+            ...prevState,
+            bio: userData.bio || '',
+            createdAt: userData.createdAt || '',
+            updatedAt: userData.updatedAt || ''
+          }));
+        }
+      } catch (error) {
+        console.error("Error al obtener los datos del usuario:", error);
+      }
+    };
+
+    if (user) {
+      loadUserData();
+    }
+  }, [user]);
+
+  const handleUpdate = async (e) => {
     e.preventDefault();
 
+    const updatedUserData = {
+      displayName: formState.username,
+      bio: formState.bio,
+      password: formState.password.trim() !== '' ? formState.password : null
+    };
+
+    if (selectedImage) {
+      const { ok, imageUrl, errorMessage } = await updateUserProfileImageInContext(selectedImage);
+
+      if (!ok) {
+        setUpdateMessage(errorMessage || 'Error al actualizar la imagen de perfil');
+        return;
+      }
+
+      updatedUserData.photoURL = imageUrl;
+    }
+
+    const { ok, message, errorMessage } = await updateUserProfile(updatedUserData);
+
+    if (ok) {
+      setUpdateMessage(message || 'Perfil actualizado correctamente');
+      setFormState(prevState => ({
+        ...prevState,
+        password: '',
+        updatedAt: new Date().toISOString()
+      }));
+    } else {
+      setUpdateMessage(errorMessage || 'Error al actualizar el perfil');
+    }
+  };
+
+  const handleImageChange = (e) => {
+    if (e.target.files.length > 0) {
+      setSelectedImage(e.target.files[0]);
+    }
   };
 
   const handleChange = (e) => {
@@ -24,81 +89,100 @@ export const Profile = () => {
   };
 
   return (
-    <div className="vh-100 bg-gray">
-      <div className="row justify-content-center container-fluid vh-100">
-        <div className="col-md-10  bg-light">
-          <div className="bg-purple d-flex align-items-center">
-            <img
-              src={user?.photoURL}
-              className="border border-gray border-5 img-fluid"
-              alt="Imagen Redonda"
-            />
-          </div>
+    <div className="vh-100 bg-light">
+      <div className="container vh-100 d-flex justify-content-center align-items-center">
+        <div className="col-md-8 col-lg-6 bg-white shadow-sm p-4 rounded">
+          <h3 className="mb-4 text-center">Mi perfil</h3>
           <form onSubmit={handleUpdate}>
-            <br/>
-            <h3>Mi perfil</h3>
-            <p className="ms-auto me-5">Creado el: {user?.createdAt && new Date(user.createdAt).toLocaleDateString()}</p>
-            {}
-            <br></br>
-            <div className="input-group mb-3">
+            <div className="d-flex justify-content-center mb-4">
+              <div
+                style={{
+                  width: '130px',
+                  height: '130px',
+                  overflow: 'hidden',
+                  borderRadius: '50%',
+                  border: '5px solid gray',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center'
+                }}
+              >
+                <img
+                  src={user?.photoURL || '/default-profile.png'}
+                  alt="Foto de perfil"
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'fill'
+                  }}
+                />
+              </div>
+            </div>
+            <div className="mb-3">
+              <label className="form-label">Cambiar foto de perfil</label>
+              <input type="file" className="form-control" onChange={handleImageChange} />
+            </div>
+            <div className="mb-3">
+              <label className="form-label">Nombre de usuario</label>
               <input
                 type="text"
                 required
                 className="form-control"
-                aria-label="Sizing example input"
-                aria-describedby="inputGroup-sizing-default"
-                placeholder={user?.displayName}
+                placeholder="Nombre de usuario"
                 value={formState.username}
                 onChange={handleChange}
                 name="username"
               />
             </div>
-
-            <div className="input-group mb-3">
+            <div className="mb-3">
+              <label className="form-label">Correo electrónico</label>
               <input
                 type="email"
-                required
                 className="form-control"
-                aria-label="Sizing example input"
-                aria-describedby="inputGroup-sizing-default"
-                placeholder={user?.email}
-                value={formState.email}
-                onChange={handleChange}
+                placeholder="Correo electrónico"
+                value={formState.email || user?.googleEmail || ''}
+                readOnly
                 name="email"
               />
             </div>
-
-            <div className="input-group mb-3">
+            <div className="mb-3">
+              <label className="form-label">Nueva Contraseña</label>
               <input
                 type="password"
-                required
                 className="form-control"
-                aria-label="Sizing example input"
-                aria-describedby="inputGroup-sizing-default"
                 placeholder="Nueva Contraseña"
                 value={formState.password}
                 onChange={handleChange}
                 name="password"
               />
             </div>
-
-            <div className="input-group mb-3">
+            <div className="mb-3">
+              <label className="form-label">Bio</label>
               <textarea
                 className="form-control"
                 id="bio"
                 name="bio"
                 rows="3"
                 placeholder="Bio"
-                value={formState.description}
+                value={formState.bio}
                 onChange={handleChange}
               ></textarea>
             </div>
-
-            <br></br>
-            <div>
-              <button className="btn btn-outline-dark text-dark" type="submit">
+            <p className="text-muted">
+              Creado el: {formState.createdAt && new Date(formState.createdAt).toLocaleDateString()}
+            </p>
+            <p className="text-muted">
+              Última actualización: {formState.updatedAt && new Date(formState.updatedAt).toLocaleDateString()}
+            </p>
+            <div className="d-grid gap-2">
+              <button className="btn btn-primary" type="submit">
                 Modificar
               </button>
+              {updateMessage && (
+                <p className={`mt-2 ${updateMessage.includes('Error') ? 'text-danger' : 'text-success'}`}>
+                  {updateMessage}
+                </p>
+              )}
             </div>
           </form>
         </div>
@@ -106,3 +190,6 @@ export const Profile = () => {
     </div>
   );
 };
+
+
+ 
