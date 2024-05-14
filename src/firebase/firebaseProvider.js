@@ -10,7 +10,6 @@ import { getFirestore, doc, setDoc, updateDoc, getDoc } from "firebase/firestore
 import { ref, uploadBytes, getStorage, getDownloadURL } from "firebase/storage";
 import {v4} from 'uuid';
 
-
 const GoogleProvider = new GoogleAuthProvider();
 
 export const signInwithGoogle = async () => {
@@ -114,21 +113,20 @@ export const signInUser = async (email, password) => {
   }
 };
 
-export const updateUser  = async (uid, updatedUserData) => {
+export const updateUser = async (uid, updatedUserData) => {
   try {
     const { password, displayName, ...userData } = updatedUserData;
 
-    
     if (password) {
       await updatePassword(FirebaseAuth.currentUser, password);
     }
 
-    
     if (displayName) {
       await updateProfile(FirebaseAuth.currentUser, { displayName });
     }
 
-    
+    userData.updatedAt = new Date().toISOString();
+
     const db = getFirestore();
     const userRef = doc(db, 'users', uid);
     await updateDoc(userRef, userData);
@@ -162,3 +160,7 @@ export const uploadImg = async ( img, folder ) => {
     console.log(error)
   }
 }
+
+
+
+

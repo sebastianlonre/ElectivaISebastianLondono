@@ -2,8 +2,11 @@ import React, {  useReducer } from 'react';
 import { AuthContext } from './AuthContext';
 import { authReducer } from '../reducers/AuthReducer';
 import { types } from '../types';
-import { signInUser, logoutUser, signInwithGoogle, registerUser, updateUser } from '../../firebase/firebaseProvider';
+import { signInUser, logoutUser, signInwithGoogle, registerUser, updateUser, uploadImg  } from '../../firebase/firebaseProvider';
 import { updateUserDisplayName } from '../../firebase/firebaseProvider'; 
+import { updateProfile } from 'firebase/auth';
+import { FirebaseAuth } from '../../firebase/connectionFireBase';
+import { doc, getFirestore, updateDoc } from 'firebase/firestore';
 
 const initialState = { logged: false, user: null };
 
@@ -89,23 +92,49 @@ export const AuthProvider = ({ children }) => {
 
   const updateUserProfile = async (updatedUserData) => {
     const { displayName, ...otherData } = updatedUserData;
-
+  
     if (displayName) {
       const displayNameUpdateResult = await updateUserDisplayName(displayName);
       if (!displayNameUpdateResult.ok) {
         return { ok: false, errorMessage: displayNameUpdateResult.errorMessage };
       }
     }
-
+  
+    
+    otherData.updatedAt = new Date().toISOString();
+  
     const { ok, message, errorMessage } = await updateUser(authState.user.uid, otherData);
-
+  
     if (ok) {
-      const updatedUser = { ...authState.user, ...updatedUserData };
+      const updatedUser = { ...authState.user, ...updatedUserData, updatedAt: otherData.updatedAt };
       dispatch({ type: types.update, payload: updatedUser });
     }
-
+  
     return { ok, message, errorMessage };
   };
+  const updateUserProfileImageInContext = async (imageFile) => {
+    if (!authState.user) return { ok: false, errorMessage: 'No user is logged in' };
+  
+    const imageUrl = await uploadImg(imageFile, 'userPhoto');
+  
+    if (imageUrl) {
+      
+      await updateProfile(FirebaseAuth.currentUser, { photoURL: imageUrl });
+  
+     
+      const db = getFirestore();
+      const userRef = doc(db, 'users', authState.user.uid);
+      await updateDoc(userRef, { photoURL: imageUrl });
+  
+      const updatedUser = { ...authState.user, photoURL: imageUrl };
+      dispatch({ type: types.update, payload: updatedUser });
+  
+      return { ok: true, imageUrl };
+    } else {
+      return { ok: false, errorMessage: 'Error uploading image' };
+    }
+  };
+  
 
   return (
     <AuthContext.Provider
@@ -115,11 +144,14 @@ export const AuthProvider = ({ children }) => {
         logout,
         loginGoogle,
         register,
-        updateUserProfile
+        updateUserProfile, 
+        updateUserProfileImageInContext
       }}
     >
       {children}
     </AuthContext.Provider>
   );
 };
+
+
 
