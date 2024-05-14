@@ -25,6 +25,7 @@ export const ReviewFormModal = ({ isOpen, onClose, productId }) => {
     event.preventDefault();
     const review={
       createdBy: user.uid,
+      displayNameBy: user?.displayName,
       title,
       description,
       calification,
