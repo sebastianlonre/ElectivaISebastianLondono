@@ -3,12 +3,15 @@ import {
   signInWithEmailAndPassword,
   signInWithPopup,
   updateProfile,
-  GoogleAuthProvider} from "firebase/auth";
-import { FirebaseAuth, FirebaseStorage, FirebaseDB  } from "./connectionFireBase";
-import { getFirestore, collection, doc, setDoc, updateDoc } from "firebase/firestore";
+  GoogleAuthProvider,
+  updatePassword} from "firebase/auth";
+import { FirebaseAuth  } from "./connectionFireBase";
+import { getFirestore, doc, setDoc, updateDoc, getDoc } from "firebase/firestore";
 import { ref, uploadBytes, getStorage, getDownloadURL } from "firebase/storage";
-import {v4} from 'uuid'
+import {v4} from 'uuid';
 
+
+const GoogleProvider = new GoogleAuthProvider();
 
 export const signInwithGoogle = async () => {
   GoogleProvider.setCustomParameters({ prompt: 'select_account' });
@@ -16,6 +19,23 @@ export const signInwithGoogle = async () => {
   try {
     const result = await signInWithPopup(FirebaseAuth, GoogleProvider);
     const { uid, photoURL, displayName, email } = result.user;
+
+    
+    const db = getFirestore();
+    const userRef = doc(db, 'users', uid);
+    const userSnapshot = await getDoc(userRef);
+
+    
+    if (!userSnapshot.exists()) {
+      await setDoc(userRef, {
+        uid,
+        photoURL,
+        displayName,
+        email,
+        bio: '', 
+        createdAt: new Date().toISOString(),
+      });
+    }
 
     return {
       ok: true,
@@ -25,7 +45,7 @@ export const signInwithGoogle = async () => {
       uid
     };
   } catch (error) {
-    console.log(error);
+    console.error("Error al iniciar sesión con Google:", error);
     return {
       ok: false,
       errorMessage: error.message
@@ -46,8 +66,8 @@ export const registerUser = async ({ email, password, displayName, bio }) => {
 
     await setDoc(userRef, {
       uid,
-      displayName,
-      email,
+      
+      
       photoURL,
       bio: bio || '', 
       createdAt: new Date().toISOString(),
@@ -57,8 +77,8 @@ export const registerUser = async ({ email, password, displayName, bio }) => {
       ok: true,
       uid,
       photoURL,
-      email,
-      displayName,
+      
+      
       bio: bio || '', 
     };
   } catch (error) {
@@ -94,23 +114,40 @@ export const signInUser = async (email, password) => {
   }
 };
 
-export const updateUser = async (uid, updatedUserData) => {
+export const updateUser  = async (uid, updatedUserData) => {
   try {
+    const { password, displayName, ...userData } = updatedUserData;
+
+    
+    if (password) {
+      await updatePassword(FirebaseAuth.currentUser, password);
+    }
+
+    
+    if (displayName) {
+      await updateProfile(FirebaseAuth.currentUser, { displayName });
+    }
+
+    
     const db = getFirestore();
     const userRef = doc(db, 'users', uid);
+    await updateDoc(userRef, userData);
 
-    await setDoc(userRef, updatedUserData, { merge: true }); 
-
-    return {
-      ok: true,
-      message: 'Perfil actualizado correctamente'
-    };
+    return { ok: true, message: 'Perfil actualizado correctamente' };
   } catch (error) {
     console.error("Error al actualizar perfil:", error);
-    return {
-      ok: false,
-      errorMessage: 'Error al actualizar el perfil'
-    };
+    return { ok: false, errorMessage: 'Error al actualizar el perfil' };
+  }
+};
+
+  
+export const updateUserDisplayName = async (displayName) => {
+  try {
+    await updateProfile(FirebaseAuth.currentUser, { displayName });
+    return { ok: true, message: 'Nombre de usuario actualizado correctamente' };
+  } catch (error) {
+    console.error('Error al actualizar el nombre de usuario:', error);
+    return { ok: false, errorMessage: 'Error al actualizar el nombre de usuario' };
   }
 };
 export const uploadImg = async ( img, folder ) => {

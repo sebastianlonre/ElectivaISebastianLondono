@@ -1,8 +1,9 @@
-import React, { useEffect, useReducer } from 'react';
+import React, {  useReducer } from 'react';
 import { AuthContext } from './AuthContext';
 import { authReducer } from '../reducers/AuthReducer';
 import { types } from '../types';
-import { signInUser, logoutUser, signInwithGoogle, registerUser, updateUser  } from '../../firebase/firebaseProvider';
+import { signInUser, logoutUser, signInwithGoogle, registerUser, updateUser } from '../../firebase/firebaseProvider';
+import { updateUserDisplayName } from '../../firebase/firebaseProvider'; 
 
 const initialState = { logged: false, user: null };
 
@@ -17,19 +18,19 @@ const init = () => {
 export const AuthProvider = ({ children }) => {
   const [authState, dispatch] = useReducer(authReducer, initialState, init);
 
-  const login = async (email='', password='') => {
+  const login = async (email = '', password = '') => {
     const { ok, uid, photoURL, displayName, errorMessage } = await signInUser(email, password);
 
     if (!ok) {
-      dispatch({ type: types.error, payload: { errorMessage }})
+      dispatch({ type: types.error, payload: { errorMessage } });
       return false;
     }
 
-    const payload = { uid, email, photoURL, displayName }
+    const payload = { uid, email, photoURL, displayName };
 
-    const action = { type: types.login, payload }
+    const action = { type: types.login, payload };
 
-    localStorage.setItem('user', JSON.stringify(payload))
+    localStorage.setItem('user', JSON.stringify(payload));
 
     dispatch(action);
 
@@ -40,15 +41,15 @@ export const AuthProvider = ({ children }) => {
     const { ok, uid, photoURL, displayName, email: googleEmail, errorMessage } = await signInwithGoogle();
 
     if (!ok) {
-      dispatch({ type: types.error, payload: { errorMessage }})
+      dispatch({ type: types.error, payload: { errorMessage } });
       return false;
     }
 
-    const payload = { uid, googleEmail, photoURL, displayName }
+    const payload = { uid, googleEmail, photoURL, displayName };
 
-    const action = { type: types.login, payload }
+    const action = { type: types.login, payload };
 
-    localStorage.setItem('user', JSON.stringify(payload))
+    localStorage.setItem('user', JSON.stringify(payload));
 
     dispatch(action);
 
@@ -57,13 +58,13 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     localStorage.removeItem('user');
-    const action = { type: types.logout }
+    const action = { type: types.logout };
     logoutUser();
     dispatch(action);
   };
 
-  const register = async (email, password, displayName, bio) => {
-    const { ok, errorMessage, photoURL, uid } = await registerUser({ email, displayName, password });
+  const register = async (email, password, displayName) => {
+    const { ok, errorMessage, photoURL, uid, bio } = await registerUser({ email, displayName, password });
 
     if (!ok) {
       if (errorMessage.includes('auth/email-already-in-use')) {
@@ -76,10 +77,10 @@ export const AuthProvider = ({ children }) => {
 
     const currentDate = new Date().toISOString();
 
-    const payload = { uid, email, photoURL, displayName, bio, createdAt: currentDate }
-    const action = { type: types.login, payload }
+    const payload = { uid, email, photoURL, displayName, createdAt: currentDate, bio };
+    const action = { type: types.login, payload };
 
-    localStorage.setItem('user', JSON.stringify(payload))
+    localStorage.setItem('user', JSON.stringify(payload));
 
     dispatch(action);
 
@@ -87,14 +88,23 @@ export const AuthProvider = ({ children }) => {
   };
 
   const updateUserProfile = async (updatedUserData) => {
-    const { ok, errorMessage } = await updateUser(authState.user.uid, updatedUserData);
+    const { displayName, ...otherData } = updatedUserData;
 
-    if (!ok) {
-      console.error(errorMessage);
-     
-    } else {
-      dispatch({ type: types.update, payload: updatedUserData });
+    if (displayName) {
+      const displayNameUpdateResult = await updateUserDisplayName(displayName);
+      if (!displayNameUpdateResult.ok) {
+        return { ok: false, errorMessage: displayNameUpdateResult.errorMessage };
+      }
     }
+
+    const { ok, message, errorMessage } = await updateUser(authState.user.uid, otherData);
+
+    if (ok) {
+      const updatedUser = { ...authState.user, ...updatedUserData };
+      dispatch({ type: types.update, payload: updatedUser });
+    }
+
+    return { ok, message, errorMessage };
   };
 
   return (
@@ -112,3 +122,4 @@ export const AuthProvider = ({ children }) => {
     </AuthContext.Provider>
   );
 };
+

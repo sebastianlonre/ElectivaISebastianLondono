@@ -36,8 +36,8 @@ export const NavBar = () => {
                                 <ul className="dropdown-menu dropdown-menu-light">
 
                                     <li>
-                                        <Link className="dropdown-item" to="/Profile">{user?.email}</Link>
-                                        <Link className="dropdown-item" to="/Profile">{user?.googleEmail}</Link>
+                                        <Link className="dropdown-item" to="/Profile">{user?.email || user?.googleEmail || ''}</Link>
+                                        
 
                                     </li>
                                     <li>

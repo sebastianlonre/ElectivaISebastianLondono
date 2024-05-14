@@ -1,19 +1,72 @@
-import { Link } from "react-router-dom";
+import React, { useContext, useState, useEffect } from "react";
 import { AuthContext } from '../../context/auth/AuthContext';
-import { useContext, useState, useEffect } from "react";
+import { getDoc, doc, getFirestore } from "firebase/firestore";
 
 export const Profile = () => {
-  const { user } = useContext(AuthContext);
+  const { user, updateUserProfile } = useContext(AuthContext);
   const [formState, setFormState] = useState({
-    username: user?.displayName,
-    email: user?.email,
+    username: user?.displayName || '',
+    email: user?.email || '',
     password: '',
-    description: user?.bio || ''
+    bio: '',
+    createdAt: ''
   });
+  const [updateMessage, setUpdateMessage] = useState(null);
 
-  const handleUpdate = (e) => {
+  useEffect(() => {
+    const loadUserData = async () => {
+      try {
+        const db = getFirestore();
+        const userRef = doc(db, 'users', user.uid);
+        const userSnapshot = await getDoc(userRef);
+
+        if (userSnapshot.exists()) {
+          const userData = userSnapshot.data();
+          setFormState(prevState => ({
+            ...prevState,
+            bio: userData.bio || '',
+            createdAt: userData.createdAt || ''
+          }));
+        }
+      } catch (error) {
+        console.error("Error al obtener los datos del usuario:", error);
+      }
+    };
+
+    if (user) {
+      loadUserData();
+    }
+  }, [user]);
+
+  const handleUpdate = async (e) => {
     e.preventDefault();
 
+    const updatedUserData = {
+      displayName: formState.username,
+      bio: formState.bio,
+      password: formState.password.trim() !== '' ? formState.password : null
+    };
+
+    const { ok, message, errorMessage } = await updateUserProfile(updatedUserData);
+
+    if (ok) {
+      setUpdateMessage(message || 'Perfil actualizado correctamente');
+
+      const updatedUser = {
+        ...user,
+        displayName: formState.username,
+        bio: formState.bio
+      };
+
+      setFormState(prevState => ({
+        ...prevState,
+        username: formState.username,
+        password: '',
+        bio: formState.bio
+      }));
+    } else {
+      setUpdateMessage(errorMessage || 'Error al actualizar el perfil');
+    }
   };
 
   const handleChange = (e) => {
@@ -26,28 +79,30 @@ export const Profile = () => {
   return (
     <div className="vh-100 bg-gray">
       <div className="row justify-content-center container-fluid vh-100">
-        <div className="col-md-10  bg-light">
-          <div className="bg-purple d-flex align-items-center">
-            <img
-              src={user?.photoURL}
-              className="border border-gray border-5 img-fluid"
-              alt="Imagen Redonda"
-            />
-          </div>
+        <div className="col-md-10 bg-light">
           <form onSubmit={handleUpdate}>
-            <br/>
+            <br />
             <h3>Mi perfil</h3>
-            <p className="ms-auto me-5">Creado el: {user?.createdAt && new Date(user.createdAt).toLocaleDateString()}</p>
-            {}
-            <br></br>
+            <div className="bg-purple d-flex align-items-center justify-content-center">
+              <img
+                src={user?.photoURL || '/default-profile.png'}
+                className="border border-gray border-5 img-fluid rounded-circle"
+                alt="Foto de perfil"
+              />
+            </div>
+            <p className="ms-auto me-5">
+              Creado el: {formState.createdAt && new Date(formState.createdAt).toLocaleDateString()}
+            </p>
+            <br />
+
+           
+
             <div className="input-group mb-3">
               <input
                 type="text"
                 required
                 className="form-control"
-                aria-label="Sizing example input"
-                aria-describedby="inputGroup-sizing-default"
-                placeholder={user?.displayName}
+                placeholder="Nombre de usuario"
                 value={formState.username}
                 onChange={handleChange}
                 name="username"
@@ -57,13 +112,11 @@ export const Profile = () => {
             <div className="input-group mb-3">
               <input
                 type="email"
-                required
                 className="form-control"
-                aria-label="Sizing example input"
-                aria-describedby="inputGroup-sizing-default"
-                placeholder={user?.email}
-                value={formState.email}
-                onChange={handleChange}
+                placeholder="Correo electrónico"
+                value={formState.email || user?.googleEmail || ''}
+                
+                readOnly
                 name="email"
               />
             </div>
@@ -71,10 +124,7 @@ export const Profile = () => {
             <div className="input-group mb-3">
               <input
                 type="password"
-                required
                 className="form-control"
-                aria-label="Sizing example input"
-                aria-describedby="inputGroup-sizing-default"
                 placeholder="Nueva Contraseña"
                 value={formState.password}
                 onChange={handleChange}
@@ -89,16 +139,21 @@ export const Profile = () => {
                 name="bio"
                 rows="3"
                 placeholder="Bio"
-                value={formState.description}
+                value={formState.bio}
                 onChange={handleChange}
               ></textarea>
             </div>
 
-            <br></br>
+            <br />
             <div>
               <button className="btn btn-outline-dark text-dark" type="submit">
                 Modificar
               </button>
+              {updateMessage && (
+                <p className={updateMessage.includes('Error') ? 'text-danger' : 'text-success'}>
+                  {updateMessage}
+                </p>
+              )}
             </div>
           </form>
         </div>
@@ -106,3 +161,5 @@ export const Profile = () => {
     </div>
   );
 };
+
+
