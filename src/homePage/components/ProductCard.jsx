@@ -6,15 +6,16 @@ export const ProductCard = ({ product }) => {
   const avgRating = reviewRate(product.id);
 
   const handleViewProduct = () => {
-    const imgURL = encodeURIComponent(product.imgURL);
-    navigate(`/ViewProduct/${product.id}/${product.productName}/${product.productDescription}/${product.selectedCategory}/${product.price}/${imgURL}`)
+    navigate(`/ViewProduct/${product.id}`, { state: { product } });
   };
 
   return (
     <div className="card mb-2" style={{ maxWidth: "500px", cursor: "pointer" }} onClick={handleViewProduct}>
       <div className="row no-gutters">
         <div className="col-md-4">
-          <img src={product.imgURL} className="card-img" alt="Product" />
+          <div className="div-IMG-cart">
+            <img src={product.imgURL} className="card-img" alt="Product" />
+          </div>
         </div>
         <div className="col-md-8">
           <div className="card-body">

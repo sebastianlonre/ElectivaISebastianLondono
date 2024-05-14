@@ -26,6 +26,7 @@ export const EditMyProduct = ({ isOpen, onClose, product }) => {
       updatedAt: formatDate(new Date().toISOString()),
     });
     onClose();
+    location. reload()
   };
 
   return (
