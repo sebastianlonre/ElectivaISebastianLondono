@@ -1,9 +1,10 @@
 import { useContext, useEffect } from "react"
 import { reviewContext } from "../../reviews/context"
+import { AuthContext } from "../../context/auth"
 
 export const Reviews = ( productId ) => {
 
-    const {review, getReviews} = useContext(reviewContext)
+    const {review, getReviews} = useContext(reviewContext);
     useEffect(() => {
       getReviews(productId);
     }, [])
@@ -16,6 +17,7 @@ export const Reviews = ( productId ) => {
                     <div className="justify-content-center align-items-center">
                         <div className="card p-4">
                             <h5>{review.title}</h5>
+                            <p>subido por: {review.displayNameBy}</p>
                             <p>{review.description}</p>
                             <h6>calificacion: {review.calification}</h6>
 

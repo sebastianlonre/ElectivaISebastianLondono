@@ -47,7 +47,7 @@ export const ViewProduct = ({}) => {
                 <h2>{product.productName}</h2>
                 <h5 className="text-secondary">id: {product.id}</h5>
                 <h5 className="mt-2 rate-margin">{avgRating}⭐</h5>
-                  <p>Subido por: {user?.email}</p>
+                  <p>Subido por: {user?.displayName}</p>
                   <p className='mt-4'>{product.productDescription}</p>
                 </div>
                 <div className='d-flex'>
