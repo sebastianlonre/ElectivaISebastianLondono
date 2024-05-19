@@ -51,6 +51,7 @@ export const PushProuduct = () => {
 
     const newProduct = {
       createdBy: user.uid,
+      displayName:user.displayName,
       productName,
       productDescription,
       selectedCategory,
