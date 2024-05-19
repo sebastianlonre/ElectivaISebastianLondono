@@ -5,7 +5,6 @@ import { collection, doc, setDoc, getDocs, updateDoc, deleteDoc } from "firebase
 import { FirebaseDB, FirebaseStorage } from "../../firebase/connectionFireBase"
 import { productTypes } from "../types/types"
 import { ProductContext } from './'
-import { getStorage, ref, uploadBytes } from "firebase/storage"
 
 const initialState = {
   product: []

@@ -4,6 +4,7 @@ import { ViewProduct } from "../products/pages";
 import { HomePage } from "../homePage/pages";
 import { PrivateRoute } from "./PrivateRoute";
 import { ProfileRouter } from "../Profile/routes/ProfileRouter";
+import { ViewProfile } from "../social/pages/ViewProfile";
 
 export const AppRouter = () => {
   return (
@@ -23,6 +24,10 @@ export const AppRouter = () => {
                   path="/ViewProduct/:id"
                   element={<ViewProduct/>}
                 />
+
+                <Route
+                  path="/ViewProfile/:id"
+                  element={<ViewProfile/>}/>
 
                 <Route path="/*" element={<HomePage />} />
             </Route>

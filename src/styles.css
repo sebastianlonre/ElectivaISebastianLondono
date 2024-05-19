@@ -69,3 +69,27 @@
   .date-margin{
     margin-left: 20%;
   }
+
+  .div-description {
+    height: 100px;
+    width: 500px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+  }
+
+  .div-description::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .div-description::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 4px;
+  }
+
+  .div-description::-webkit-scrollbar-thumb:vertical {
+    opacity: 0;
+  }
+
+  .div-description:hover::-webkit-scrollbar-thumb:vertical {
+    opacity: 1;
+  }

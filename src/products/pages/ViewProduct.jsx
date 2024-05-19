@@ -27,6 +27,11 @@ export const ViewProduct = ({}) => {
     }
   }
 
+  const goViewProfile = ( id ) => {
+    navigate(`/ViewProfile/${id}`);
+    location.reload();
+  }
+
   return (
     <div className="container mt-5">
       <div className="justify-content-center align-items-center">
@@ -47,18 +52,23 @@ export const ViewProduct = ({}) => {
                 <h2>{product.productName}</h2>
                 <h5 className="text-secondary">id: {product.id}</h5>
                 <h5 className="mt-2 rate-margin">{avgRating}⭐</h5>
-                  <p>Subido por: {user?.displayName}</p>
-                  <p className='mt-4'>{product.productDescription}</p>
+                  <button className="nav-link " type="button" onClick={() => goViewProfile(product.createdBy)}>
+                    Subido por: {product.displayName}
+                  </button>
+
+                  <div className='div-description'>
+                    <p className='mt-2'>{product.productDescription}</p>
+                  </div>
                 </div>
-                <div className='d-flex'>
-                  <p className="mt-3">etiqueta: { product.selectedCategory }</p>
+                <div className='d-flex mt-4'>
+                  <p className="mt-5">etiqueta: { product.selectedCategory }</p>
                 </div>
 
                 <div className='d-flex flex-row'>
                   <button type='button' className="btn btn-outline-dark text-dark mt-3 mr-2" onClick={shopProduct}>
                     comprar
                   </button>
-                  {user &&(
+                  {user && user.uid!==product.createdBy &&(
                     <>
                       <button type='button' className="btn btn-outline-dark text-dark mt-3" onClick={reviewModal.openModal}>
                       Subir reseña
