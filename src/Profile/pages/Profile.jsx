@@ -1,6 +1,9 @@
 import React, { useContext, useState, useEffect } from "react";
 import { AuthContext } from '../../context/auth/AuthContext';
 import { getDoc, doc, getFirestore } from "firebase/firestore";
+import { SocialContext } from "../../social/context";
+import { ViewSocial } from "../../modals/ViewSocial";
+import { useModal } from "../../modals/hooks/useModal";
 
 export const Profile = () => {
   const { user, updateUserProfile, updateUserProfileImageInContext } = useContext(AuthContext);
@@ -88,6 +91,30 @@ export const Profile = () => {
     });
   };
 
+  const { followers, following, getFollowers, getFollowing } = useContext(SocialContext);
+
+  useEffect(() => {
+    getFollowers(user.uid);
+    getFollowing(user.uid);
+  }, []);
+
+  const socialModal = useModal();
+
+  const [tittleModal, setTittleModal] = useState("");
+  const [socialData, setSocialData] = useState(null);
+
+  const openFollowersModal = () => {
+    setTittleModal("Me siguen");
+    setSocialData(followers);
+    socialModal.openModal();
+  };
+
+  const openFollingModal = () => {
+    setTittleModal("Sigo a");
+    setSocialData(following);
+    socialModal.openModal();
+  };
+
   return (
     <div className="vh-100 bg-light">
       <div className="container vh-100 d-flex justify-content-center align-items-center">
@@ -118,7 +145,15 @@ export const Profile = () => {
                 />
               </div>
             </div>
-            <div className="mb-3">
+            <div className="mb-2">
+              <button className="nav-link" type="button" onClick={openFollowersModal}>
+                Me siguen: {followers.length}
+              </button>
+              <button className="nav-link" type="button" onClick={openFollingModal}>
+                Sigo a: {following.length}
+              </button>
+            </div>
+            <div className="mb-4">
               <label className="form-label">Cambiar foto de perfil</label>
               <input type="file" className="form-control" onChange={handleImageChange} />
             </div>
@@ -187,6 +222,7 @@ export const Profile = () => {
           </form>
         </div>
       </div>
+      <ViewSocial isOpen={socialModal.isOpen} onClose={socialModal.closeModal} tittle={tittleModal} socialData={socialData}/>
     </div>
   );
 };

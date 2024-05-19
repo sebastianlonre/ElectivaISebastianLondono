@@ -1,37 +1,38 @@
-import { socialTypes } from '../types'
+import { socialTypes } from '../types';
 
-export const socialReducer = (state ={}, action) =>{
+export const socialReducer = (state = {}, action) => {
   switch (action.type) {
     case socialTypes.followUser:
-      return{
+      return {
         ...state,
-        social: state.social.push(action.payload)
-      }
+        following: [...state.following, action.payload]
+      };
     case socialTypes.getUserByID:
-      return{
+      return {
         ...state,
         social: action.payload
-      }
+      };
     case socialTypes.getFollowers:
-      return{
+      return {
         ...state,
-        social: action.payload
-      }
+        followers: action.payload
+      };
     case socialTypes.getFollowings:
-      return{
+      return {
         ...state,
-        social: action.payload
-      }
-    case socialTypes.getFollowers:
-      return{
-        ...state,
-        social: action.payload
-      }
+        following: action.payload
+      };
+      case socialTypes.getMyFollowings:
+        return {
+          ...state,
+          MyFollowing: action.payload
+        };
     case socialTypes.unFollow:
-      return{
-        social: null
-      }
+      return {
+        ...state,
+        following: state.following.filter(id => id !== action.payload)
+      };
     default:
       return state;
   }
-}
+};

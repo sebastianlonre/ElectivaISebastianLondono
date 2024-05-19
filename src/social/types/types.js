@@ -3,5 +3,6 @@ export const socialTypes ={
   followUser: '[Social] followUser',
   getFollowers: '[Social] getFollowers',
   getFollowings: '[Social] getFollowings',
-  unFollow: '[Social] unFollow'
+  unFollow: '[Social] unFollow',
+  getMyFollowings: '[Social] getMyFollowings'
 }
