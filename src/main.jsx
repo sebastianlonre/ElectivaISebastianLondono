@@ -6,6 +6,7 @@ import './styles.css'
 import { AuthProvider } from './context/auth/AuthProvider.jsx'
 import { ProductProvider } from './products/context/index.js'
 import { ReviewProvider } from './reviews/context/ReviewProvider.jsx'
+import { SocialProvider } from './social/context/socialProvider.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
@@ -13,7 +14,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       <AuthProvider>
         <ProductProvider>
           <ReviewProvider>
-            <App />
+            <SocialProvider>
+              <App />
+            </SocialProvider>
           </ReviewProvider>
         </ProductProvider>
       </AuthProvider>
