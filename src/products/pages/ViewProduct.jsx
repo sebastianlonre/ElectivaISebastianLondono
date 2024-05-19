@@ -48,10 +48,13 @@ export const ViewProduct = ({}) => {
                 <h5 className="text-secondary">id: {product.id}</h5>
                 <h5 className="mt-2 rate-margin">{avgRating}⭐</h5>
                   <p>Subido por: {user?.displayName}</p>
-                  <p className='mt-4'>{product.productDescription}</p>
+
+                  <div className='div-description'>
+                    <p className='mt-1'>{product.productDescription}</p>
+                  </div>
                 </div>
-                <div className='d-flex'>
-                  <p className="mt-3">etiqueta: { product.selectedCategory }</p>
+                <div className='d-flex mt-4'>
+                  <p className="mt-5">etiqueta: { product.selectedCategory }</p>
                 </div>
 
                 <div className='d-flex flex-row'>
