@@ -1,15 +1,21 @@
-import { useContext, useEffect } from 'react'
-import { ProductGrid, Carousel } from '../components';
-import { SocialContext } from '../../social/context';
+import { ProductContext } from '../../products/context';
+import { ProductGrid} from '../components';
+import { useContext, useEffect } from "react";
 
 export const HomePage = () => {
+
+  const { product, fetchAllProducts } = useContext(ProductContext);
+
+    useEffect(() => {
+      fetchAllProducts();
+    }, []);
 
   return (
     <>
     <div>
       <div className="container mt-2">
         <div className="row">
-          <ProductGrid />
+          <ProductGrid product={product}/>
         </div>
       </div>
 
