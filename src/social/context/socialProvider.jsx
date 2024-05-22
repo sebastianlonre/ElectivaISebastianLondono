@@ -18,12 +18,12 @@ export const SocialProvider = ({ children }) => {
 
   const { user } = useContext(AuthContext);
 
-  const followUser = async (userID) => {
+  const followUser = async (userID, socialName, MyName) => {
     try {
       const userDocAuth = doc(collection(FirebaseDB, `/users/${user.uid}/following`), userID);
       const userDoc = doc(collection(FirebaseDB, `/users/${userID}/followers`), user.uid);
-      await setDoc(userDocAuth, { followedUserID: userID });
-      await setDoc(userDoc, { followerUserID: user.uid });
+      await setDoc(userDocAuth, { followedUserID: userID, displayName: socialName});
+      await setDoc(userDoc, { followerUserID: user.uid, displayName: MyName});
 
       const action = { type: socialTypes.followUser, payload: userID };
       dispatch(action);
