@@ -6,7 +6,7 @@ import {
   GoogleAuthProvider,
   updatePassword} from "firebase/auth";
 import { FirebaseAuth  } from "./connectionFireBase";
-import { getFirestore, doc, setDoc, updateDoc, getDoc } from "firebase/firestore";
+import { getFirestore, doc, setDoc, updateDoc, getDoc } from "firebase/firestore/lite";
 import { ref, uploadBytes, getStorage, getDownloadURL } from "firebase/storage";
 import {v4} from 'uuid';
 
@@ -19,19 +19,19 @@ export const signInwithGoogle = async () => {
     const result = await signInWithPopup(FirebaseAuth, GoogleProvider);
     const { uid, photoURL, displayName, email } = result.user;
 
-    
+
     const db = getFirestore();
     const userRef = doc(db, 'users', uid);
     const userSnapshot = await getDoc(userRef);
 
-    
+
     if (!userSnapshot.exists()) {
       await setDoc(userRef, {
         uid,
         photoURL,
         displayName,
         email,
-        bio: '', 
+        bio: '',
         createdAt: new Date().toISOString(),
       });
     }
@@ -65,10 +65,10 @@ export const registerUser = async ({ email, password, displayName, bio }) => {
 
     await setDoc(userRef, {
       uid,
-      
-      
+
+
       photoURL,
-      bio: bio || '', 
+      bio: bio || '',
       createdAt: new Date().toISOString(),
     });
 
@@ -76,9 +76,9 @@ export const registerUser = async ({ email, password, displayName, bio }) => {
       ok: true,
       uid,
       photoURL,
-      
-      
-      bio: bio || '', 
+
+
+      bio: bio || '',
     };
   } catch (error) {
     return {
@@ -138,7 +138,7 @@ export const updateUser = async (uid, updatedUserData) => {
   }
 };
 
-  
+
 export const updateUserDisplayName = async (displayName) => {
   try {
     await updateProfile(FirebaseAuth.currentUser, { displayName });
@@ -160,7 +160,3 @@ export const uploadImg = async ( img, folder ) => {
     console.log(error)
   }
 }
-
-
-
-

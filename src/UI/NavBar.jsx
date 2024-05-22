@@ -62,22 +62,17 @@ export const NavBar = () => {
                 </>
               )}
             </ul>
-            <form className="d-flex" role="search">
-              <input className="form-control me-2" type="search" placeholder=". . ." aria-label="Search" />
-              <button className="btn btn-outline-dark text-dark" type="submit">Buscar</button>
-            </form>
           </div>
         </div>
       </nav>
-     
+
       <div className="container mt-4">
-        
+
         <Outlet />
       </div>
-      
+
       <Login isOpen={loginModal.isOpen} onClose={loginModal.closeModal} openRegisterForm={registerModal.openModal} />
       <Register isOpen={registerModal.isOpen} onClose={registerModal.closeModal} openLoginForm={loginModal.openModal} />
     </>
   );
 };
-
