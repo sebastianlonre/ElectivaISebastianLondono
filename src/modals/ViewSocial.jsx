@@ -31,7 +31,7 @@ export const ViewSocial = ({ isOpen, onClose, tittle, socialData }) => {
                 <tbody>
                   {socialData.map((item, index) => (
                     <tr key={index}>
-                      <td>{item.id}</td>
+                      <td>{item.displayName}</td>
                       <td>
                         <button
                           className="btn btn-outline-dark text-dark mt-3"

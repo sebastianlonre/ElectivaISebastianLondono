@@ -35,13 +35,13 @@ export const ViewProfile = () => {
 
   const onFollowClick = async (event) => {
     event.preventDefault();
-    await followUser(id);
+    await followUser(id, social.displayName, user.displayName);
     location.reload();
   };
 
   const onUnFollowClick = async (event) => {
     event.preventDefault();
-    await unFollowUser(id);
+    await unFollowUser(id, social.displayName, user.displayName);
     location.reload();
   };
 
