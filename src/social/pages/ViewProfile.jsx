@@ -5,6 +5,7 @@ import { ViewSocial } from "../../modals/ViewSocial";
 import { useModal } from "../../modals/hooks/useModal";
 import { AuthContext } from "../../context/auth";
 
+
 export const ViewProfile = () => {
   const { id } = useParams();
   const { social, followers, following, getUserByID, followUser, unFollowUser, MyFollowing, getFollowers, getFollowing, getMyFollowing } = useContext(SocialContext);
@@ -50,19 +51,20 @@ export const ViewProfile = () => {
   return (
     <div className="vh-100 bg-light">
       <div className="container vh-100 d-flex justify-content-center align-items-center">
-        <div className="col-md-8 col-lg-6 bg-white shadow-sm p-4 rounded">
+        <div className="col-md-8 col-lg-6 bg-white shadow-sm p-5 rounded">
           <h3 className="mb-4 text-center">{social.displayName || "Nombre de usuario"}</h3>
           <div className="d-flex justify-content-center mb-4">
             <div
               style={{
-                width: '130px',
-                height: '130px',
+                width: '150px',
+                height: '150px',
                 overflow: 'hidden',
                 borderRadius: '50%',
-                border: '5px solid gray',
+                border: '5px solid #6c757d',
                 display: 'flex',
                 justifyContent: 'center',
-                alignItems: 'center'
+                alignItems: 'center',
+                background: '#f8f9fa'
               }}
             >
               <img
@@ -71,40 +73,43 @@ export const ViewProfile = () => {
                 style={{
                   width: '100%',
                   height: '100%',
-                  objectFit: 'fill'
+                  objectFit: 'cover'
                 }}
               />
             </div>
           </div>
-          <div className="mb-2">
-            <button className="nav-link" type="button" onClick={openFollowersModal}>
-              Seguidores: {followers.length}
+          <div className="mb-4 text-center">
+            <button className="btn btn-link text-decoration-none" type="button" onClick={openFollowersModal}>
+              Seguidores {followers.length}
             </button>
-            <button className="nav-link" type="button" onClick={openFollowingModal}>
-              Sigue a: {following.length}
+            <button className="btn btn-link text-decoration-none" type="button" onClick={openFollowingModal}>
+              Seguidos {following.length}
             </button>
           </div>
           <div className="mb-3">
-            <p>{social.displayName || "Nombre de usuario"}</p>
+            <h5 className="text-center">{social.displayName || "Nombre de usuario"}</h5>
           </div>
           <div className="mb-3">
-            <p>Biografía: {social.bio || "Bio del usuario"}</p>
+            <p className="text-center"><strong>Biografía:</strong> {social.bio || "Bio del usuario"}</p>
           </div>
-          <p className="text-muted">
-            Creado el: {social.createdAt || "Fecha de creación"}
+          <p className="text-muted text-center">
+            <strong>Creado el:</strong> {social.createdAt || "Fecha de creación"}
           </p>
-          <p className="text-muted">
-            Última actualización: {social.updatedAt || "Fecha de última actualización"}
+          <p className="text-muted text-center">
+            <strong>Última actualización:</strong> {social.updatedAt || "Fecha de última actualización"}
           </p>
-          {id !== user.uid && !isFollowing && (
-            <button className="btn btn-primary" onClick={onFollowClick}>
-              Seguir
-            </button>
-          )}
-          {id !== user.uid && isFollowing && (
-            <button className="btn btn-primary" onClick={onUnFollowClick}>
-              Dejar de seguir
-            </button>
+          {id !== user.uid && (
+            <div className="d-flex justify-content-center mt-4">
+              {isFollowing ? (
+                <button className="btn btn-outline-danger" onClick={onUnFollowClick}>
+                  Dejar de seguir
+                </button>
+              ) : (
+                <button className="btn btn-outline-primary" onClick={onFollowClick}>
+                  Seguir
+                </button>
+              )}
+            </div>
           )}
         </div>
       </div>

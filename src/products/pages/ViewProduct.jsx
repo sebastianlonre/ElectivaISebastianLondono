@@ -1,4 +1,4 @@
-import {  useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Reviews } from '../components';
 import { ReviewFormModal, Register, Login } from '../../modals';
 import { useModal } from '../../modals/hooks/useModal';
@@ -6,11 +6,10 @@ import { AuthContext } from '../../context/auth/AuthContext';
 import { useContext } from 'react';
 import { reviewRate } from "../../reviews/components/reviewRate";
 
-export const ViewProduct = ({}) => {
-
+export const ViewProduct = () => {
   const location = useLocation();
   const { state: { product } } = location;
-  const { user } =useContext(AuthContext);
+  const { user } = useContext(AuthContext);
   const avgRating = reviewRate(product.id);
 
   const reviewModal = useModal();
@@ -19,82 +18,63 @@ export const ViewProduct = ({}) => {
   const navigate = useNavigate();
 
   const shopProduct = () => {
-    if(user){
+    if (user) {
       console.log("comprado");
       navigate("/");
-    }else{
+    } else {
       loginModal.openModal();
     }
-  }
+  };
 
-  const goViewProfile = ( id ) => {
+  const goViewProfile = (id) => {
     navigate(`/ViewProfile/${id}`);
     location.reload();
-  }
+  };
 
   return (
     <div className="container mt-5">
-      <div className="justify-content-center align-items-center">
-        <div className="card p-4">
-          <form>
-            <br />
-            <div className="row">
-              <div className="col-md-6">
-                <div className='div-IMG'>
-                  <img
-                  src={product.imgURL}
-                  className=" img-fluid"
-                  />
-                </div>
+      <div className="row justify-content-center align-items-center">
+        <div className="card p-4 col-md-8 shadow-lg border-0 rounded-3">
+          <div className="row">
+            <div className="col-md-6">
+              <img src={product.imgURL} className="img-fluid rounded-3" alt={product.productName} />
+            </div>
+            <div className="col-md-6 d-flex flex-column justify-content-center">
+              <h2 className="mb-3">{product.productName}</h2>
+              <h5 className="text-muted mb-3">ID: {product.id}</h5>
+              <h5 className="text-warning mb-3">{avgRating}⭐</h5>
+              <p className="mb-3">{product.productDescription}</p>
+              <p className="mb-3"><span className="badge bg-info">{product.selectedCategory}</span></p>
+              <h5 className=" mb-3">${product.price}</h5>
+              <div className="d-flex">
+                <button type="button" className="btn btn-secondary me-2" onClick={shopProduct}>
+                  <strong>Comprar</strong>
+                </button>
+                {user && user.uid !== product.createdBy && (
+                  <button type="button" className="btn btn-light" onClick={reviewModal.openModal}>
+                    <strong>Subir reseña</strong>
+                  </button>
+                )}
               </div>
-              <div className="col-md-6">
-                <div className='description-div'>
-                <h2>{product.productName}</h2>
-                <h5 className="text-secondary">id: {product.id}</h5>
-                <h5 className="mt-2 rate-margin">{avgRating}⭐</h5>
-                  <button className="nav-link " type="button" onClick={() => goViewProfile(product.createdBy)}>
-                    Subido por: {product.displayName}
+              <br />
+              <div className="border p-3">
+                <nav>
+                  <span className="text-dark d-block mb-2" style={{fontWeight: 'bold'}}>Subido por:</span>
+                  <button className="btn btn-link p-0" type="button" onClick={() => goViewProfile(product.createdBy)}>
+                    <span style={{ textDecoration: 'none' }}><strong>{product.displayName}</strong></span>
                   </button>
-
-                  <div className='div-description'>
-                    <p className='mt-2'>{product.productDescription}</p>
-                  </div>
-                </div>
-                <div className='d-flex mt-4'>
-                  <p className="mt-5">etiqueta: { product.selectedCategory }</p>
-                </div>
-
-                <div className='d-flex flex-row'>
-                  <button type='button' className="btn btn-outline-dark text-dark mt-3 mr-2" onClick={shopProduct}>
-                    comprar
-                  </button>
-                  {user && user.uid!==product.createdBy &&(
-                    <>
-                      <button type='button' className="btn btn-outline-dark text-dark mt-3" onClick={reviewModal.openModal}>
-                      Subir reseña
-                      </button>
-                    </>
-                  )}
-                   <h5 className="mt-4 price-margin">${product.price}</h5>
-                </div>
-
+                </nav>
               </div>
             </div>
-
-            <br />
-            <div>
-
-            </div>
-          </form>
+          </div>
         </div>
       </div>
-
       <div className="mt-5">
-        <Reviews reviewId={product.id}/>
+        <Reviews reviewId={product.id} />
       </div>
       <ReviewFormModal isOpen={reviewModal.isOpen} onClose={reviewModal.closeModal} productId={product.id} />
-      <Register isOpen={registerModal.isOpen} onClose={registerModal.closeModal} openLoginForm={loginModal.openModal}/>
-      <Login isOpen={loginModal.isOpen} onClose={loginModal.closeModal} openRegisterForm={registerModal.openModal}/>
+      <Register isOpen={registerModal.isOpen} onClose={registerModal.closeModal} openLoginForm={loginModal.openModal} />
+      <Login isOpen={loginModal.isOpen} onClose={loginModal.closeModal} openRegisterForm={registerModal.openModal} />
     </div>
-  )
-}
+  );
+};
