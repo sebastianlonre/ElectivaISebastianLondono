@@ -1,2 +1,2 @@
 export * from './socialProvider'
-export * from './SocialContext'
+export * from './socialContext'
