@@ -10,7 +10,7 @@ export const ProductCard = ({ product }) => {
   };
 
   return (
-    <div className="card mb-2" style={{ maxWidth: "500px", cursor: "pointer" }} onClick={handleViewProduct}>
+    <div className="card mb-3 border border-dark rounded shadow-sm" style={{ maxWidth: "500px", cursor: "pointer" }} onClick={handleViewProduct}>
       <div className="row no-gutters">
         <div className="col-md-4">
           <div className="div-IMG-cart">
@@ -19,15 +19,13 @@ export const ProductCard = ({ product }) => {
         </div>
         <div className="col-md-8">
           <div className="card-body">
-              <h5 className="card-title">{product.productName}</h5>
-            <p className="card-text" >{product.productDescription.length > 35 ? `${product.productDescription.substring(0, 35)}...` : product.productDescription}</p>
+            <h5 className="card-title">{product.productName}</h5>
+            <p className="card-text">{product.productDescription.length > 35 ? `${product.productDescription.substring(0, 35)}...` : product.productDescription}</p>
             <p className="price-text">${product.price}</p>
             <div className="d-flex">
               <p className="card-text"><small className="text-muted">{avgRating} ⭐</small></p>
-              <p className="card-text"><small className="text-muted ">subido: {product.updatedAt}</small></p>
-
+              <p className="card-text"><small className="text-muted">subido: {product.updatedAt}</small></p>
             </div>
-
           </div>
         </div>
       </div>
