@@ -2,10 +2,10 @@ import { ProductCard } from "./ProductCard";
 import { ProductContext } from '../../products/context'
 import { useContext, useEffect, useState } from "react";
 
-export const ProductGrid = ({ product , tittle}) => {
+export const ProductGrid = ({ product , tittle, productPer}) => {
 
   const [currentPage, setCurrentPage] = useState(1);
-  const productsPerPage = 4;
+  const productsPerPage = productPer;
 
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;

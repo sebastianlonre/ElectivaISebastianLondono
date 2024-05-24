@@ -2,11 +2,14 @@ import React, { useState, useEffect } from "react";
 import { ProductContext } from '../../products/context';
 import { ProductGrid } from '../components';
 import { useContext } from "react";
+import { SocialContext } from "../../social/context";
 
 export const HomePage = () => {
   const { product, fetchAllProducts } = useContext(ProductContext);
+  const { MyFollowing, getMyFollowing } = useContext(SocialContext);
   const [inputValue, setInputValue] = useState('');
   const [filteredProducts, setFilteredProducts] = useState([]);
+  const [filteredProductsSocial, setFilteredProductsSocial] = useState([]);
   const [showAdvancedOptions, setShowAdvancedOptions] = useState(false);
   const [selectedOptions, setSelectedOptions] = useState({
     category: false,
@@ -15,7 +18,16 @@ export const HomePage = () => {
 
   useEffect(() => {
     fetchAllProducts();
+    getMyFollowing();
   }, []);
+
+  useEffect(() => {
+    const filteredSocial = product.filter(item => {
+      return MyFollowing.some(following => following.followedUserID === item.createdBy);
+    });
+
+    setFilteredProductsSocial(filteredSocial);
+  }, [MyFollowing]);
 
   useEffect(() => {
     const filtered = product.filter(item => {
@@ -49,6 +61,8 @@ export const HomePage = () => {
     }));
   };
 
+  const combinedResults = [...new Set(filteredProductsSocial.concat(filteredProducts))];
+
   return (
     <div>
       <div className="container mt-2">
@@ -70,7 +84,7 @@ export const HomePage = () => {
               {showAdvancedOptions && (
                 <div className="row mt-2">
                   <div className="col-md-6">
-                  <div className="form-check">
+                    <div className="form-check">
                       <input
                         type="checkbox"
                         className="form-check-input"
@@ -99,7 +113,16 @@ export const HomePage = () => {
           </div>
         </div>
         <div className="row">
-          <ProductGrid product={filteredProducts} tittle={"Los productos de nuestros usuarios"}/>
+          {inputValue ? (
+            <ProductGrid product={combinedResults} tittle={"Resultados de la búsqueda"} productPer={6} />
+          ) : (
+            <div>
+
+                <ProductGrid product={filteredProductsSocial} tittle={"Productos de los usuarios a los que sigues"} productPer={2} />
+                <ProductGrid product={product} tittle={"Los productos de nuestros usuarios"} productPer={4} />
+
+            </div>
+          )}
         </div>
       </div>
     </div>
