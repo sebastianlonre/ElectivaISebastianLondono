@@ -109,50 +109,47 @@ export const Profile = () => {
     socialModal.openModal();
   };
 
-  const openFollingModal = () => {
+  const openFollowingModal = () => {
     setTittleModal("Sigo a");
     setSocialData(following);
     socialModal.openModal();
   };
 
   return (
-    <div className="vh-100 bg-light">
-      <div className="container vh-100 d-flex justify-content-center align-items-center">
-        <div className="col-md-8 col-lg-6 bg-white shadow-sm p-4 rounded">
+    <div className="container-fluid">
+      <div className="row">
+        <nav className="col-md-4 col-lg-3 d-flex flex-column p-4 bg-dark text-white" style={{ minHeight: '100vh', fontSize: '1.1rem' }}>
+          <div className="mb-4 text-center">
+            <img
+              src={user?.photoURL || '/default-profile.png'}
+              alt="Foto de perfil"
+              className="rounded-circle img-thumbnail"
+              style={{ width: '120px', height: '120px', objectFit: 'cover' }}
+            />
+            <h4 className="mt-3">{user.displayName}</h4>
+            
+            
+
+          </div>
+          <button className="btn btn-light mb-3" onClick={openFollowersModal}>
+            Seguidores <span className="badge bg-primary">{followers.length}</span>
+          </button>
+          <button className="btn btn-light mb-3" onClick={openFollowingModal}>
+            Seguidos <span className="badge bg-primary">{following.length}</span>
+          </button>
+          <br />
+          <p className="text-white">
+            Creado el: {formState.createdAt && new Date(formState.createdAt).toLocaleDateString()}
+          </p>
+          <p className="text-white">
+            Última actualización: {formState.updatedAt && new Date(formState.updatedAt).toLocaleDateString()}
+          </p>
+
+        </nav>
+        <div className="col-md-8 col-lg-9 bg-light p-4">
           <h3 className="mb-4 text-center">Mi perfil</h3>
           <form onSubmit={handleUpdate}>
-            <div className="d-flex justify-content-center mb-4">
-              <div
-                style={{
-                  width: '130px',
-                  height: '130px',
-                  overflow: 'hidden',
-                  borderRadius: '50%',
-                  border: '5px solid gray',
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center'
-                }}
-              >
-                <img
-                  src={user?.photoURL || '/default-profile.png'}
-                  alt="Foto de perfil"
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    objectFit: 'fill'
-                  }}
-                />
-              </div>
-            </div>
-            <div className="mb-2">
-              <button className="nav-link" type="button" onClick={openFollowersModal}>
-                Me siguen: {followers.length}
-              </button>
-              <button className="nav-link" type="button" onClick={openFollingModal}>
-                Sigo a: {following.length}
-              </button>
-            </div>
+       
             <div className="mb-4">
               <label className="form-label">Cambiar foto de perfil</label>
               <input type="file" className="form-control" onChange={handleImageChange} />
@@ -203,12 +200,7 @@ export const Profile = () => {
                 onChange={handleChange}
               ></textarea>
             </div>
-            <p className="text-muted">
-              Creado el: {formState.createdAt && new Date(formState.createdAt).toLocaleDateString()}
-            </p>
-            <p className="text-muted">
-              Última actualización: {formState.updatedAt && new Date(formState.updatedAt).toLocaleDateString()}
-            </p>
+            
             <div className="d-grid gap-2">
               <button className="btn btn-primary" type="submit">
                 Modificar
@@ -222,10 +214,9 @@ export const Profile = () => {
           </form>
         </div>
       </div>
-      <ViewSocial isOpen={socialModal.isOpen} onClose={socialModal.closeModal} tittle={tittleModal} socialData={socialData}/>
-    </div>
+    <ViewSocial isOpen={socialModal.isOpen} onClose={socialModal.closeModal}tittle={tittleModal} socialData={socialData}/>
+   </div>
   );
 };
+            
 
-
- 

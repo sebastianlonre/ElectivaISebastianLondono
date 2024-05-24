@@ -1,5 +1,5 @@
-import { useState, useContext } from 'react'
-import { ProductContext } from '../products/context'
+import { useState, useContext } from 'react';
+import { ProductContext } from '../products/context';
 
 export const EditMyProduct = ({ isOpen, onClose, product }) => {
   const [productName, setProductName] = useState(product.productName);
@@ -26,60 +26,62 @@ export const EditMyProduct = ({ isOpen, onClose, product }) => {
       updatedAt: formatDate(new Date().toISOString()),
     });
     onClose();
-    location. reload()
+    location.reload();
   };
 
   return (
     <>
       {isOpen && (
-        <div className="overlay position-fixed top-0 left-0 w-100 h-100 d-flex justify-content-center align-items-center">
-          <div className="card p-4">
-            <form onSubmit={handleSubmit}>
-              <button type="button" className="btn btn-close float-end" aria-label="Close" onClick={onClose}></button>
-              <h2>Editar producto</h2>
-              <br></br>
-              <div className="input-group mb-3">
-                <input
-                  type="text"
-                  required
-                  className="form-control"
-                  aria-label="Sizing example input"
-                  aria-describedby="inputGroup-sizing-default"
-                  value={productName}
-                  onChange={(e) => setProductName(e.target.value)}
-                />
+        <div className="modal d-block" tabIndex="-1" role="dialog">
+          <div className="modal-dialog" role="document">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title">Editar Producto</h5>
+                <button type="button" className="btn-close" onClick={onClose} aria-label="Close"></button>
               </div>
-              <div className="input-group mb-3">
-                <textarea
-                  type="text"
-                  className="form-control"
-                  aria-label="Sizing example input"
-                  aria-describedby="inputGroup-sizing-default"
-                  value={productDescription}
-                  onChange={(e) => setProductDescription(e.target.value)}
-                />
-              </div>
-              <div className="col-md-6">
-                <div>
-                  <div className="dropdown">
-                    <button className="btn btn-outline-dark text-dark dropdown-toggle form-control" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                      {selectedCategory}
-                    </button>
-                    <ul className="dropdown-menu form-control">
-                      <li><a className="dropdown-item" data-value="Computadores" onClick={handleCategoryChange}>Computadores</a></li>
-                      <li><a className="dropdown-item" data-value="Celulares android" onClick={handleCategoryChange}>Celulares android</a></li>
-                      <li><a className="dropdown-item" data-value="Camaras" onClick={handleCategoryChange}>Camaras</a></li>
-                      <li><a className="dropdown-item" data-value="Accesorios" onClick={handleCategoryChange}>Accesorios</a></li>
-                      <li><a className="dropdown-item" data-value="Celulares Iphone" onClick={handleCategoryChange}>Celulares Iphone</a></li>
-                    </ul>
+              <div className="modal-body">
+                <form onSubmit={handleSubmit}>
+                  <div className="mb-3">
+                    <label htmlFor="productName" className="form-label">Nombre del Producto</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="productName"
+                      value={productName}
+                      onChange={(e) => setProductName(e.target.value)}
+                    />
                   </div>
-                </div>
+                  <div className="mb-3">
+                    <label htmlFor="productDescription" className="form-label">Descripción del Producto</label>
+                    <textarea
+                      className="form-control"
+                      id="productDescription"
+                      rows="3"
+                      value={productDescription}
+                      onChange={(e) => setProductDescription(e.target.value)}
+                    ></textarea>
+                  </div>
+                  <div className="mb-3">
+                    <label htmlFor="selectedCategory" className="form-label">Categoría</label>
+                    <select
+                      className="form-select"
+                      id="selectedCategory"
+                      value={selectedCategory}
+                      onChange={(e) => setSelectedCategory(e.target.value)}
+                    >
+                      <option value="Computadores">Computadores</option>
+                      <option value="Celulares android">Celulares android</option>
+                      <option value="Camaras">Cámaras</option>
+                      <option value="Accesorios">Accesorios</option>
+                      <option value="Celulares Iphone">Celulares iPhone</option>
+                    </select>
+                  </div>
+                  <div className="text-end">
+                    <button type="submit" className="btn btn-primary">Actualizar</button>
+                  </div>
+                </form>
               </div>
-              <br></br>
-              <div>
-                <button className="btn btn-outline-dark text-dark" type="submit">Actualizar</button>
-              </div>
-            </form>
+            </div>
           </div>
         </div>
       )}

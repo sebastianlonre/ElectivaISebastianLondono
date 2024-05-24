@@ -4,12 +4,12 @@ import { getFirestore } from 'firebase/firestore/lite';
 import { getStorage } from 'firebase/storage';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyC2Q0K5JWfH720gRDY1w1hi_payQZ3S0CE",
-  authDomain: "niah-your-shop.firebaseapp.com",
-  projectId: "niah-your-shop",
-  storageBucket: "niah-your-shop.appspot.com",
-  messagingSenderId: "751176981824",
-  appId: "1:751176981824:web:f560cd6f95dd554c6c2ea5"
+  apiKey: "AIzaSyDdAhxUlMjP70RhW-z-rdu4Eqz7JJ7Bn1E",
+  authDomain: "niah--shop-7f48e.firebaseapp.com",
+  projectId: "niah--shop-7f48e",
+  storageBucket: "niah--shop-7f48e.appspot.com",
+  messagingSenderId: "62129911906",
+  appId: "1:62129911906:web:5419c15e8628af9de2393b"
 };
 
 export const FirebaseApp = initializeApp(firebaseConfig);

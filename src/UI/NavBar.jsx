@@ -1,18 +1,21 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import { Login, Register } from '../modals';
 import { AuthContext } from '../context/auth/AuthContext';
 import { useModal } from '../modals/hooks/useModal';
+
 
 export const NavBar = () => {
   const { user, logout } = useContext(AuthContext);
   const loginModal = useModal();
   const registerModal = useModal();
   const location = useLocation();
+  const dropdownRef = useRef(null);
+
 
   return (
     <>
-      <nav className="navbar navbar-expand-lg navbar-light bg-white border-bottom border-5 border-gray">
+      <nav className="navbar navbar-expand-lg navbar-light bg-light border-bottom">
         <div className="container-fluid">
           <Link className="navbar-brand" to="/">
             <h3>Niah</h3>
@@ -20,17 +23,17 @@ export const NavBar = () => {
           <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span className="navbar-toggler-icon"></span>
           </button>
-          <div className="collapse navbar-collapse justify-content-end" id="navbarNav">
+          <div className="collapse navbar-collapse justify-content-end" id="navbarNav"> 
             <ul className="navbar-nav">
               <li className={`nav-item ${location.pathname === '/' ? 'active' : ''}`}>
                 <Link className="nav-link" to="/">Inicio</Link>
               </li>
               {user && (
-                <li className="nav-item dropdown">
-                  <Link className="nav-link dropdown-toggle" to="/Profile" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <li className="nav-item dropdown" ref={dropdownRef}>
+                  <Link className="nav-link dropdown-toggle" to="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                     Perfil
                   </Link>
-                  <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                     <li>
                       <Link className="dropdown-item" to="/Profile">{user?.email || user?.googleEmail || ''}</Link>
                     </li>
@@ -50,7 +53,7 @@ export const NavBar = () => {
                 </li>
               )}
             </ul>
-            <ul className="navbar-nav">
+            <ul className="navbar-nav ms-2"> 
               {!user && (
                 <>
                   <li className="nav-item">
@@ -67,7 +70,6 @@ export const NavBar = () => {
       </nav>
 
       <div className="container mt-4">
-
         <Outlet />
       </div>
 

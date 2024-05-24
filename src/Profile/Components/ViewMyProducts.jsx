@@ -13,7 +13,7 @@ export const ViewMyProducts = () => {
     <>
       {product.map((product) => (
         <tr key={product.id}>
-          <th scope="row">{product.id}</th>
+          <td>{product.id}</td>
           <td>{product.productName}</td>
           <td>{product.createdAt}</td>
           <td>{product.updatedAt}</td>
