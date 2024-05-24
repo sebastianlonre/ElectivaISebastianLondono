@@ -69,7 +69,7 @@ export const HomePage = () => {
         <div className="row">
           <div className="col-md-12 mb-4">
             <form onSubmit={handleSubmit} className="d-flex justify-content-center flex-column">
-              <div className="mb-2">
+              <div className="input-group mb-3">
                 <input
                   type="text"
                   value={inputValue}
@@ -77,13 +77,13 @@ export const HomePage = () => {
                   placeholder="Buscar"
                   className="form-control"
                 />
+                <button className="btn btn-outline-secondary" type="button" onClick={toggleAdvancedOptions}>
+                  Opciones avanzadas
+                </button>
               </div>
-              <button type="button" className="nav-link" onClick={toggleAdvancedOptions}>
-                Opciones avanzadas
-              </button>
               {showAdvancedOptions && (
                 <div className="row mt-2">
-                  <div className="col-md-6">
+                  <div className="col-md-7 d-flex align-items-center justify-content-center">
                     <div className="form-check">
                       <input
                         type="checkbox"
@@ -95,7 +95,7 @@ export const HomePage = () => {
                       <label className="form-check-label" htmlFor="category">Categoría</label>
                     </div>
                   </div>
-                  <div className="col-md-6">
+                  <div className="col-md-3 d-flex align-items-center justify-content-center">
                     <div className="form-check">
                       <input
                         type="checkbox"
@@ -117,10 +117,8 @@ export const HomePage = () => {
             <ProductGrid product={combinedResults} tittle={"Resultados de la búsqueda"} productPer={6} />
           ) : (
             <div>
-
-                <ProductGrid product={filteredProductsSocial} tittle={"Productos de los usuarios a los que sigues"} productPer={2} />
-                <ProductGrid product={product} tittle={"Los productos de nuestros usuarios"} productPer={4} />
-
+              <ProductGrid product={filteredProductsSocial} tittle={"Productos de usuarios seguidos"} productPer={2} />
+              <ProductGrid product={product} tittle={"Productos"} productPer={4} />
             </div>
           )}
         </div>

@@ -28,13 +28,12 @@ export const Register = ({ isOpen, onClose, openLoginForm }) => {
   return (
     <>
       {isOpen && (
-        <div className="overlay position-fixed top-0 left-0 w-100 h-100 d-flex justify-content-center align-items-center">
-          <div className="card p-4">
+        <div className="overlay position-fixed top-0 left-0 w-100 h-100 d-flex justify-content-center align-items-center" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+          <div className="card p-4 shadow-lg rounded" style={{ maxWidth: '400px' }}>
+            <button type="button" className="btn-close float-end text-white" aria-label="Close" onClick={onClose}></button>
+            <h2 className="text-center mb-4 ">Regístrate</h2>
             <form>
-              <button type="button" className="btn btn-close float-end" aria-label="Close" onClick={onClose}></button>
-              <h2>Regístrate</h2>
-              <br />
-              <div className="input-group mb-3">
+              <div className="mb-3">
                 <input
                   type="text"
                   className="form-control"
@@ -43,9 +42,10 @@ export const Register = ({ isOpen, onClose, openLoginForm }) => {
                   value={displayName}
                   onChange={onInputChange}
                   placeholder="Usuario"
+                  style={{ borderRadius: '25px', padding: '15px', fontSize: '1.1rem', backgroundColor: 'rgba(255,255,255,0.8)' }}
                 />
               </div>
-              <div className="input-group mb-3">
+              <div className="mb-3">
                 <input
                   type="email"
                   className="form-control"
@@ -54,9 +54,10 @@ export const Register = ({ isOpen, onClose, openLoginForm }) => {
                   value={email}
                   onChange={onInputChange}
                   placeholder="Correo"
+                  style={{ borderRadius: '25px', padding: '15px', fontSize: '1.1rem', backgroundColor: 'rgba(255,255,255,0.8)' }}
                 />
               </div>
-              <div className="input-group mb-3">
+              <div className="mb-3">
                 <input
                   type="password"
                   className="form-control"
@@ -65,23 +66,19 @@ export const Register = ({ isOpen, onClose, openLoginForm }) => {
                   value={password}
                   onChange={onInputChange}
                   placeholder="Contraseña"
+                  style={{ borderRadius: '25px', padding: '15px', fontSize: '1.1rem', backgroundColor: 'rgba(255,255,255,0.8)' }}
                 />
               </div>
-              
-              <button className="btn btn-outline-primary mt-3" type="submit" onClick={onRegister}>
+              <button className="btn btn-primary btn-lg btn-block" type="submit" onClick={onRegister} style={{ borderRadius: '25px', fontSize: '1.2rem', fontWeight: 'bold' }}>
                 Registrarse
               </button>
-              <br />
-              {errorMessage && (
-                <div className="alert alert-danger" role="alert">
-                  {errorMessage}
-                </div>
-              )}
-              <br />
             </form>
-            <Link className="nav-link" onClick={() => { onClose(); openLoginForm(); }}>
-              ¿Ya tienes una cuenta? Inicia sesión
-            </Link>
+            {errorMessage && (
+              <div className="alert alert-danger mt-3" role="alert">
+                {errorMessage}
+              </div>
+            )}
+            <p className="text-center mt-3 mb-0 ">¿Ya tienes una cuenta?, <Link onClick={() => { onClose(); openLoginForm(); }} className="text-decoration-none ">Inicia sesión</Link></p>
           </div>
         </div>
       )}
