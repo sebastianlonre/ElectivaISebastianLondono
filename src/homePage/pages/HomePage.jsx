@@ -9,7 +9,6 @@ export const HomePage = () => {
   const { MyFollowing, getMyFollowing } = useContext(SocialContext);
   const [inputValue, setInputValue] = useState('');
   const [filteredProducts, setFilteredProducts] = useState([]);
-  const [filteredProductsSocial, setFilteredProductsSocial] = useState([]);
   const [showAdvancedOptions, setShowAdvancedOptions] = useState(false);
   const [selectedOptions, setSelectedOptions] = useState({
     category: false,
@@ -21,24 +20,20 @@ export const HomePage = () => {
     getMyFollowing();
   }, []);
 
-  useEffect(() => {
-    const filteredSocial = product.filter(item => {
-      return MyFollowing.some(following => following.followedUserID === item.createdBy);
-    });
-
-    setFilteredProductsSocial(filteredSocial);
-  }, [MyFollowing]);
-
-  useEffect(() => {
-    const filtered = product.filter(item => {
+  const filterProducts = (products, filterValue) => {
+    return products.filter(item => {
       if (selectedOptions.category && item.selectedCategory) {
-        return item.selectedCategory.toLowerCase().includes(inputValue.toLowerCase());
+        return item.selectedCategory.toLowerCase().includes(filterValue.toLowerCase());
       } else if (selectedOptions.createdBy && item.displayName) {
-        return item.displayName.toLowerCase().includes(inputValue.toLowerCase());
+        return item.displayName.toLowerCase().includes(filterValue.toLowerCase());
       } else {
-        return item.productName.toLowerCase().includes(inputValue.toLowerCase());
+        return item.productName.toLowerCase().includes(filterValue.toLowerCase());
       }
     });
+  };
+
+  useEffect(() => {
+    const filtered = filterProducts(product, inputValue);
     setFilteredProducts(filtered);
   }, [inputValue, product, selectedOptions.category, selectedOptions.createdBy]);
 
@@ -61,7 +56,15 @@ export const HomePage = () => {
     }));
   };
 
-  const combinedResults = [...new Set(filteredProductsSocial.concat(filteredProducts))];
+  const filteredProductsSocial = filteredProducts.filter(item => {
+    return MyFollowing.some(following => following.followedUserID === item.createdBy);
+  });
+
+  const otherFilteredProducts = filteredProducts.filter(item => {
+    return !MyFollowing.some(following => following.followedUserID === item.createdBy);
+  });
+
+  const combinedResults = [...filteredProductsSocial, ...otherFilteredProducts];
 
   return (
     <div>
@@ -114,10 +117,18 @@ export const HomePage = () => {
         </div>
         <div className="row">
           {inputValue ? (
-            <ProductGrid product={combinedResults} tittle={"Resultados de la búsqueda"} productPer={6} />
+            combinedResults.length > 0 ? (
+              <ProductGrid product={combinedResults} tittle={"Resultados de la búsqueda"} productPer={6} />
+            ) : (
+              <div className="col-md-12">
+                <p>No se encontraron productos que coincidan con la búsqueda.</p>
+              </div>
+            )
           ) : (
             <div>
-              <ProductGrid product={filteredProductsSocial} tittle={"Productos de usuarios seguidos"} productPer={2} />
+              {filteredProductsSocial.length > 0 && (
+                <ProductGrid product={filteredProductsSocial} tittle={"Productos de usuarios a los que sigues"} productPer={2} />
+              )}
               <ProductGrid product={product} tittle={"Productos"} productPer={4} />
             </div>
           )}
