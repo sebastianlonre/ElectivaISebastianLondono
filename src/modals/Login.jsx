@@ -1,6 +1,8 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../context/auth/AuthContext';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faGoogle } from '@fortawesome/free-brands-svg-icons';
 
 export const Login = ({ isOpen, onClose, openRegisterForm }) => {
   const { login, loginGoogle, errorMessage } = useContext(AuthContext);
@@ -42,13 +44,13 @@ export const Login = ({ isOpen, onClose, openRegisterForm }) => {
   return (
     <>
       {isOpen && (
-        <div className="overlay position-fixed top-0 left-0 w-100 h-100 d-flex justify-content-center align-items-center">
+        <div className="overlay position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center">
           <div className="card p-4">
             <form onSubmit={handleLogin}>
-              <button type="button" className="btn btn-close float-end" aria-label="Close" onClick={onClose}></button>
+              <button type="button" className="btn-close position-absolute top-0 end-0 m-3" aria-label="Close" onClick={onClose}></button>
               <h2 className="mb-4">Iniciar sesión</h2>
 
-              <div className="input-group mb-3">
+              <div className="mb-3">
                 <input
                   type="email"
                   value={email}
@@ -59,7 +61,7 @@ export const Login = ({ isOpen, onClose, openRegisterForm }) => {
                 />
               </div>
 
-              <div className="input-group mb-3">
+              <div className="mb-3">
                 <input
                   type="password"
                   value={password}
@@ -75,17 +77,17 @@ export const Login = ({ isOpen, onClose, openRegisterForm }) => {
                   Usuario o contraseña inválidos
                 </div>
               )}
+                <p className="text-center mt-3 mb-0 ">¿No tienes una cuenta?, <Link to="#" className="text-decoration-none " onClick={() => { onClose(); openRegisterForm(); }}>
+                Regístrate
+              </Link> </p>
+              
 
-              <Link className="nav-link" onClick={() => { onClose(); openRegisterForm(); }}>
-                ¿No tienes una cuenta? Regístrate
-              </Link>
-
-              <button className="btn btn-outline-dark text-dark mt-3" type="submit">
+              <button className="btn btn-dark d-block w-100 mt-3" type="submit">
                 Iniciar sesión
               </button>
 
-              {}
-              <button className="btn btn-outline-primary mt-3" onClick={onGoogleLogin}>
+              <button className="btn btn-primary d-block w-100 mt-3" onClick={onGoogleLogin}>
+                <FontAwesomeIcon icon={faGoogle} className="me-2" />
                 Iniciar sesión con Google
               </button>
 
