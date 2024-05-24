@@ -99,9 +99,9 @@ export const SocialProvider = ({ children }) => {
     }
   };
 
-  const getMyFollowing = async (userID) => {
+  const getMyFollowing = async () => {
     try {
-      const querySnapshot = await getDocs(collection(FirebaseDB, `users/${userID}/following`));
+      const querySnapshot = await getDocs(collection(FirebaseDB, `users/${user.uid}/following`));
       const following = [];
 
       querySnapshot.forEach((doc) => {

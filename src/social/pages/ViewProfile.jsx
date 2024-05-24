@@ -14,7 +14,7 @@ export const ViewProfile = () => {
     getUserByID(id);
     getFollowers(id);
     getFollowing(id);
-    getMyFollowing(user.uid);
+    getMyFollowing();
   }, []);
 
   const [tittleModal, setTittleModal] = useState("");
