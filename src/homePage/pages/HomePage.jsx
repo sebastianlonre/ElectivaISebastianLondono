@@ -2,11 +2,14 @@ import React, { useState, useEffect } from "react";
 import { ProductContext } from '../../products/context';
 import { ProductGrid } from '../components';
 import { useContext } from "react";
+import { SocialContext } from "../../social/context";
 
 export const HomePage = () => {
   const { product, fetchAllProducts } = useContext(ProductContext);
+  const {MyFollowing, getMyFollowing} = useContext(SocialContext)
   const [inputValue, setInputValue] = useState('');
   const [filteredProducts, setFilteredProducts] = useState([]);
+  const [filteredProductsSocial, setfilteredProductsSocial] = useState([]);
   const [showAdvancedOptions, setShowAdvancedOptions] = useState(false);
   const [selectedOptions, setSelectedOptions] = useState({
     category: false,
@@ -15,7 +18,18 @@ export const HomePage = () => {
 
   useEffect(() => {
     fetchAllProducts();
+    getMyFollowing();
   }, []);
+
+
+  useEffect(() => {
+    const filteredSocial = product.filter(item => {
+      return MyFollowing.some(following => following.followedUserID === item.createdBy);
+    });
+
+    setfilteredProductsSocial(filteredSocial);
+  }, [MyFollowing]);
+
 
   useEffect(() => {
     const filtered = product.filter(item => {
@@ -98,9 +112,14 @@ export const HomePage = () => {
             </form>
           </div>
         </div>
-        <div className="row">
-          <ProductGrid product={filteredProducts} tittle={"Los productos de nuestros usuarios"}/>
-        </div>
+        {inputValue ?(
+            <ProductGrid product={filteredProductsSocial.concat(filteredProducts)} title={"Resultados de la búsqueda"} productPer={6} />
+        ):(
+          <div className="row">
+            <ProductGrid product={filteredProductsSocial} tittle={"Productos de los usuarios a los que sigues"} productPer={2}/>
+            <ProductGrid product={product} tittle={"Los productos de nuestros usuarios"} productPer={4}/>
+          </div>
+        )}
       </div>
     </div>
   );
